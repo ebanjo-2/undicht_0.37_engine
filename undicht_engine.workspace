@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="undicht_engine">
+		<Project filename="engine.cbp" active="1">
+		</Project>
+		<Project filename="undicht_core/core.cbp">
+		</Project>
+		<Project filename="undicht_core/implementation/graphics/opengl_33/video_opengl_33.cbp">
+			<Depends filename="undicht_core/core.cbp" />
+		</Project>
+		<Project filename="undicht_core/implementation/window/glfw/window_glfw.cbp">
+			<Depends filename="undicht_core/core.cbp" />
+		</Project>
+		<Project filename="undicht_core/implementation/audio/openal/audio_openal.cbp">
+			<Depends filename="undicht_core/core.cbp" />
+		</Project>
+		<Project filename="undicht_core/implementation/file/fstream/fstream_file.cbp">
+			<Depends filename="undicht_core/core.cbp" />
+		</Project>
+	</Workspace>
+</CodeBlocks_workspace_file>

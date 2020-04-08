@@ -1,0 +1,3 @@
+[submodule "undicht_core"]
+	path = undicht_core
+	url = https://github.com/ebanjo-2/undicht_core.git

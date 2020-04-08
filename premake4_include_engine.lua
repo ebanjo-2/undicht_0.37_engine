@@ -1,3 +1,5 @@
+-- inlcude core projects
+dofile "undicht_core/premake4_include_core_projects.lua"
 
 project "engine"
     kind "SharedLib"
@@ -22,8 +24,7 @@ project "engine"
 	configuration "release - windows"
 		flags { "OptimizeSpeed" }
 
--- inlcude core projects
-dofile "undicht_core/premake4_include_core_projects.lua"
+
 
 	
     

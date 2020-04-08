@@ -8,10 +8,5 @@ solution "undicht_engine"
 -- file for the engine project
 
 dofile "premake4_include_engine.lua"
-
-
--- inlcude core projects
-dofile "undicht_core/premake4_include_core_projects.lua"
-
 	
     

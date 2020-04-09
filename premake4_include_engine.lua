@@ -8,7 +8,7 @@ project "engine"
 
 	includedirs { "undicht_core/include", "src", "vendor" }
 	
-	links { "undicht_core"  }
+	links { "core"  }
 	
 	configuration "debug - linux"
 		links { "dl" }

@@ -4,6 +4,7 @@
 #include <window/window_lib.h>
 #include <graphics/graphics_lib.h>
 #include <audio/audio_lib.h>
+#include <file/file_lib.h>
 
 
 
@@ -13,7 +14,7 @@ namespace undicht {
     using namespace window;
     using namespace graphics;
     using namespace audio;
-    //using namespace file;
+    using namespace file;
 
     window::GraphicsContext* Engine::s_main_context = 0;
     window::Window* Engine::s_main_window = 0;
@@ -41,6 +42,7 @@ namespace undicht {
 
         GraphicsLib::initialize(s_main_context);
         AudioLib::initialize();
+        FileLib::initialize();
 
     }
 
@@ -64,6 +66,7 @@ namespace undicht {
     void Engine::terminate() {
         /// to be called when the engine is no longer used
 
+        FileLib::terminate();
         AudioLib::terminate();
         GraphicsLib::terminate();
 

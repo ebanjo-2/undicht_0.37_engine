@@ -11,6 +11,8 @@ namespace undicht {
     class Engine {
         public:
 
+            /// the main window and graphics context belong to the Engine
+            /// they may be used after the engine has been initialized, but not deleted other then by calling terminate()
             static window::GraphicsContext* s_main_context;
             static window::Window* s_main_window;
 

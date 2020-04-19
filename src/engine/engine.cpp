@@ -6,6 +6,8 @@
 #include <audio/audio_lib.h>
 #include <file/file_lib.h>
 
+#include <engine/file_loading/xml/xml_file_reader.h>
+
 
 
 namespace undicht {
@@ -60,6 +62,45 @@ namespace undicht {
     void Engine::initialize(const std::string& engine_config, const std::string& file_library) {
         /**  initializes the engine with the libraries from the engine_config file
         * @param file_library: if no file_library is given, the default library will be used to read the config */
+
+
+        if(file_library.compare("")) {
+            // the provided file library is going to be used
+            Core::setLibraryPaths("", "", "", file_library);
+
+        }
+
+
+        // initializing only the file library
+        Core::initialize(false, false, false, true);
+        FileLib::initialize();
+
+        // loading the other library file names from the config
+        XMLFileReader m_config_reader(engine_config);
+        m_config_reader.loadRootXmlElement();
+
+
+#ifdef UND_UNIX
+        XmlElement* core_libs = m_config_reader.m_root_XmlElement.findSubordinated("core_libraries")->findSubordinated("UND_UNIX");
+#endif // UND_UNIX
+
+#ifdef UND_WINDOWS
+        XmlElement* core_libs = m_config_reader.m_root_XmlElement.findSubordinated("core_libraries")->findSubordinated("UND_WINDOWS");
+#endif // UND_WINDOWS
+
+        std::cout << m_config_reader.m_root_XmlElement << "\n";
+
+        std::string window_lib = core_libs->findSubordinated("window_lib")->m_content;
+        std::string graphics_lib = core_libs->findSubordinated("graphics_lib")->m_content;
+        std::string audio_lib = core_libs->findSubordinated("audio_lib")->m_content;
+        std::string file_lib = core_libs->findSubordinated("file_lib")->m_content;
+
+        std::cout << "window lib: " << window_lib << "\n";
+
+        // initializing the core with the libraries from the config file
+        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);
+
+        initialize();
     }
 
 

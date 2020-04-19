@@ -1,66 +1,49 @@
-#ifndef XML_ELEMENT_H_INCLUDED
-#define XML_ELEMENT_H_INCLUDED
-
-
-#include <vector>
-#include <string>
-
-// a class representing an Element in a xml file
-
-namespace undicht{
+#ifndef XML_ELEMENT_H
+#define XML_ELEMENT_H
 
 
 
-class XmlElement{
-/**@brief represents an XmlElement in a xml file*/
-public:
-    std::string m_tag_name;
-    std::vector<std::string> m_tag_attributes;
-    std::string m_content;
-    // there is a hierarchy of XmlElements, so one XmlElement can contain multiple others
-    std::vector<XmlElement> m_subordinated;
+namespace undicht {
 
-    /** @brief searches the subordinated XmlElements for one with the tag name */
-    /** @param if tag_attribute is set, this will also be an criterion*/
-    /** @return a pointer to the first XmlElement found fulfilling these criteria*/
-    /** @return returns 0 if no fitting XmlElement was found*/
-    XmlElement* findSubordinated(std::string tag_name, std::string tag_attribute = "");
 
-    /** @brief searches the subordinated XmlElements for one with one of the tag names */
-    /** @param if tag_attribute is set, this will also be an criterion*/
-    /** @return a pointer to the first XmlElement found fulfilling these criteria*/
-    /** @return returns 0 if no fitting XmlElement was found*/
-    XmlElement* findSubordinated(const std::vector<std::string> &tag_names, std::string tag_attribute = "");
+    class XmlElement {
 
-    /** @brief searches the subordinated XmlElements for those with the tag name */
-    /** @param if tag_attribute is set, this will also be an criterion*/
-    /** @return pointers to all XmlElements with that tag_name are returned */
-    std::vector<XmlElement*> findAllSubordinated(std::string tag_name, std::string tag_attribute = "");
+        public:
+            // the data a xml element can store
+            std::string m_tag_name;
+            std::vector<std::string> m_tag_attributes;
+            std::string m_content;
 
-    /** @brief searches the subordinated XmlElements for those with one of the tag_names */
-    /** @param if tag_attribute is set, this will also be an criterion*/
-    /** @return pointers to all XmlElements with that tag_name are returned */
-    std::vector<XmlElement*> findAllSubordinated(const std::vector<std::string> &tag_names, std::string tag_attribute = "");
+            // each element can contain multiple child elements
+            std::vector<XmlElement> m_child_elements;
 
-    /** @return the number of tags with the tag name having the tag_attribute (optional)*/
-    int countSubordinated(std::string tag_name, std::string tag_attribute = "");
 
-    /**@brief a function to output the XmlElements content*/
-    friend std::ostream& operator<< (std::ostream& out, XmlElement &e);
+        public:
+            // functions to access the data stored in the element
 
-    /** @brief returns the value stored in the attribute with the attribute name
-    *   @example searched attribute: "name="example""  then attr_name would be "name" and "example" would be returned
-    *   @return an empty string is returned if no such attribute was found
-    */
-    static std::string getAttrValue(std::vector<std::string> &attributes, std::string attr_name);
+            /// @return whether the element has all the attributes (might have more)
+            bool hasAttributes(const std::vector<std::string>& tag_attributes) const;
 
-    XmlElement(){};
-    virtual ~XmlElement(){};
-};
+            /// @return the content stored between the start and end tag of the element (excluding child elements)
+            const std::string& getContent() const;
 
+            /** @return the first xml element that has all the requested tag attributes
+            * @example for a tag attribute "<texture name="normal">"
+            * @example tag attributes can be negated using a "!=" : "<texture name!="normal" name!="color" >"
+            * will return the first texture element that has not the "name" normal
+            * this way all child elements with certain attributes can be retrieved
+            * (for more then one attribute passed) the found element will be searched for a child element that has the next attributes */
+            const XmlElement& getElement(const std::vector<std::string>& attributes);
+
+
+        public:
+
+            XmlElement();
+            virtual ~XmlElement();
+
+
+    };
 
 } // undicht
 
-
-
-#endif // XML_ELEMENT_H_INCLUDED
+#endif // XML_ELEMENT_H

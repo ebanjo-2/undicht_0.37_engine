@@ -1,5 +1,6 @@
 #include "engine.h"
 #include <core/core.h>
+#include <core/string_tools.h>
 
 #include <window/window_lib.h>
 #include <graphics/graphics_lib.h>
@@ -77,28 +78,29 @@ namespace undicht {
 
         // loading the other library file names from the config
         XmlFile m_config_reader(engine_config);
+        m_config_reader.printRecursive();
 
 
 
-/*#ifdef UND_UNIX
-        XmlElement* core_libs = m_config_reader.m_root_XmlElement.findSubordinated("core_libraries")->findSubordinated("UND_UNIX");
+#ifdef UND_UNIX
+        XmlElement* core_libs = m_config_reader.getElement({"engine", "core_libraries", "UND_UNIX"});
 #endif // UND_UNIX
 
 #ifdef UND_WINDOWS
-        XmlElement* core_libs = m_config_reader.m_root_XmlElement.findSubordinated("core_libraries")->findSubordinated("UND_WINDOWS");
+        XmlElement* core_libs = m_config_reader.getElement({"engine", "core_libraries", "UND_WINDOWS"});
 #endif // UND_WINDOWS
 
-        std::cout << m_config_reader.m_root_XmlElement << "\n";
 
-        std::string window_lib = core_libs->findSubordinated("window_lib")->m_content;
-        std::string graphics_lib = core_libs->findSubordinated("graphics_lib")->m_content;
-        std::string audio_lib = core_libs->findSubordinated("audio_lib")->m_content;
-        std::string file_lib = core_libs->findSubordinated("file_lib")->m_content;
-
-        std::cout << "window lib: " << window_lib << "\n";
+        std::string window_lib = core_libs->getElement({"window_lib"})->getContent();
+        std::string graphics_lib = core_libs->getElement({"graphics_lib"})->getContent();
+        std::string audio_lib = core_libs->getElement({"audio_lib"})->getContent();
+        std::string file_lib = core_libs->getElement({"file_lib"})->getContent();
 
         // initializing the core with the libraries from the config file
-        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);*/
+
+        std::string file_path = core::getFilePath(engine_config);
+
+        Core::setLibraryPaths(file_path + window_lib, file_path + graphics_lib, file_path + audio_lib, file_path + file_lib);
 
         initialize();
     }

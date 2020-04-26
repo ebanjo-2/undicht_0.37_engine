@@ -1,0 +1,8 @@
+<?xml info="not_following_any_strict_version"?>
+<3D>
+	<info> a config file containing the default renderer configurations </info>
+	<Simple3D>
+		<info> a simple forward renderer for 3D objects </info>
+		<shader info="where_the_shader_src_is_stored">shader/simple_3d/shader.glsl</shader>
+	</Simple3D>
+</3D>

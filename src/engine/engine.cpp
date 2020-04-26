@@ -78,7 +78,7 @@ namespace undicht {
 
         // loading the other library file names from the config
         XmlFile m_config_reader(engine_config);
-        m_config_reader.printRecursive();
+        // m_config_reader.printRecursive(); // print out the config
 
 
 

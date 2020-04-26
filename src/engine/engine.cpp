@@ -6,7 +6,7 @@
 #include <audio/audio_lib.h>
 #include <file/file_lib.h>
 
-#include <engine/file_loading/xml/xml_file_reader.h>
+#include <engine/file_loading/xml/xml_file.h>
 
 
 
@@ -76,11 +76,11 @@ namespace undicht {
         FileLib::initialize();
 
         // loading the other library file names from the config
-        XMLFileReader m_config_reader(engine_config);
-        m_config_reader.loadRootXmlElement();
+        XmlFile m_config_reader(engine_config);
 
 
-#ifdef UND_UNIX
+
+/*#ifdef UND_UNIX
         XmlElement* core_libs = m_config_reader.m_root_XmlElement.findSubordinated("core_libraries")->findSubordinated("UND_UNIX");
 #endif // UND_UNIX
 
@@ -98,7 +98,7 @@ namespace undicht {
         std::cout << "window lib: " << window_lib << "\n";
 
         // initializing the core with the libraries from the config file
-        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);
+        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);*/
 
         initialize();
     }

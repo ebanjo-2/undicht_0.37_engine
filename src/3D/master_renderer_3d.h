@@ -1,6 +1,8 @@
 #ifndef MASTER_RENDERER_3D_H
 #define MASTER_RENDERER_3D_H
 
+#include <string>
+
 namespace undicht {
 
     class MasterRenderer3D {

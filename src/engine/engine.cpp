@@ -8,6 +8,7 @@
 #include <file/file_lib.h>
 
 #include <engine/file_loading/xml/xml_file.h>
+#include <engine/file_loading/engine_config.h>
 
 
 
@@ -64,43 +65,22 @@ namespace undicht {
         /**  initializes the engine with the libraries from the engine_config file
         * @param file_library: if no file_library is given, the default library will be used to read the config */
 
-
         if(file_library.compare("")) {
             // the provided file library is going to be used
             Core::setLibraryPaths("", "", "", file_library);
 
         }
 
-
         // initializing only the file library
         Core::initialize(false, false, false, true);
         FileLib::initialize();
 
         // loading the other library file names from the config
-        XmlFile m_config_reader(engine_config);
-        // m_config_reader.printRecursive(); // print out the config
+        EngineConfig config_reader(engine_config);
+        std::string window_lib, graphics_lib, audio_lib, file_lib;
+        config_reader.getLibraries(window_lib, graphics_lib, audio_lib, file_lib);
 
-
-
-#ifdef UND_UNIX
-        XmlElement* core_libs = m_config_reader.getElement({"engine", "core_libraries", "UND_UNIX"});
-#endif // UND_UNIX
-
-#ifdef UND_WINDOWS
-        XmlElement* core_libs = m_config_reader.getElement({"engine", "core_libraries", "UND_WINDOWS"});
-#endif // UND_WINDOWS
-
-
-        std::string window_lib = core_libs->getElement({"window_lib"})->getContent();
-        std::string graphics_lib = core_libs->getElement({"graphics_lib"})->getContent();
-        std::string audio_lib = core_libs->getElement({"audio_lib"})->getContent();
-        std::string file_lib = core_libs->getElement({"file_lib"})->getContent();
-
-        // initializing the core with the libraries from the config file
-
-        std::string file_path = core::getFilePath(engine_config);
-
-        Core::setLibraryPaths(file_path + window_lib, file_path + graphics_lib, file_path + audio_lib, file_path + file_lib);
+        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);
 
         initialize();
     }

@@ -6,7 +6,6 @@ namespace undicht {
 
     class Renderer3D {
         /** the base class to all 3D Renderers of the undicht engine */
-        public:
 
         public:
 

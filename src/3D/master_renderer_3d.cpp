@@ -9,6 +9,8 @@ namespace undicht {
 
     const std::string DEFAULT_3D_CONFIG = getFilePath(UND_CODE_SRC_FILE) + "/default_renderers.und";
 
+    Renderer3D* MasterRenderer3D::s_forward_renderer;
+
 
     MasterRenderer3D::MasterRenderer3D() {
         //ctor
@@ -31,10 +33,23 @@ namespace undicht {
         * a MasterRenderer3D config may be linked in the engine config,
         * in which case the MasterRenderer3D will be automatically initialized with it */
 
+        XmlFile config_reader(config);
+        initialize(config_reader);
+
+    }
+
+    void MasterRenderer3D::initialize(XmlElement& config) {
+
+        // creating the renderer objects
+        s_forward_renderer = new Renderer3D;
+
+
+        s_forward_renderer->loadSettings(config, "SimpleForward");
     }
 
     void MasterRenderer3D::terminate() {
 
+        delete s_forward_renderer;
 
     }
 

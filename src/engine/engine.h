@@ -5,10 +5,18 @@
 #include <window/graphics_context.h>
 #include <window/window.h>
 
+#include <engine/file_loading/xml/xml_file.h>
+
 namespace undicht {
 
 
     class Engine {
+
+        private:
+            // functions to process .und config files
+
+            static void processConfig(XmlFile& config);
+
         public:
 
             /// the main window and graphics context belong to the Engine
@@ -28,6 +36,9 @@ namespace undicht {
 
             /// to be called when the engine is no longer used
             static void terminate();
+
+
+        public:
 
 
             Engine();

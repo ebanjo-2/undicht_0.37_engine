@@ -45,6 +45,28 @@ namespace undicht {
         return (attributes_found == tag_attributes.size());
     }
 
+    bool XmlElement::hasChildElements(const std::vector<std::string>& elem_names) const{
+
+        int elements_found = 0; // has to equal the length of elem_names at the end
+
+        for(const std::string& name : elem_names) {
+
+            for(const XmlElement& child_elem : m_child_elements) {
+
+                if(!name.compare(child_elem.getName())) {
+
+                    elements_found += 1;
+
+                    break; // searching for the next attribute requested
+                }
+
+            }
+
+        }
+
+        return (elements_found == elem_names.size());
+    }
+
     const std::string& XmlElement::getName() const {
 
         return m_tag_name;
@@ -68,7 +90,7 @@ namespace undicht {
         }
     }
 
-    XmlElement* XmlElement::getElement(const std::vector<std::string>& attribute_strings, int attrib_num) {
+    XmlElement* XmlElement::getElement(const std::vector<std::string>& attribute_strings, int attrib_num){
         /** searches the elements children for the first one which has the attributes stored in the attribute string at attrib_num
         * if multiple attribute strings are provided, its children in return will be checked
         * @param attrib_num: needed so that the function can be used recursivly (what attribute string to use)
@@ -99,7 +121,7 @@ namespace undicht {
         return 0;
     }
 
-    const std::vector<const XmlElement*> XmlElement::getAllElements(const std::vector<std::string>& attribute_strings, int attrib_num) {
+    const std::vector<const XmlElement*> XmlElement::getAllElements(const std::vector<std::string>& attribute_strings, int attrib_num){
         /** @return all xml elements that have all the requested tag attributes */
 
         // splitting the attributes

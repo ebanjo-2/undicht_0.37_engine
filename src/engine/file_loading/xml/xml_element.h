@@ -32,6 +32,9 @@ namespace undicht {
             * @example tag attributes can be negated using a "!=" */
             bool hasAttributes(const std::vector<std::string>& tag_attributes) const;
 
+            /** @return whether the element has child elements with all the names */
+            bool hasChildElements(const std::vector<std::string>& elem_names) const;
+
             const std::string& getName() const;
 
             /// @return the content stored between the start and end tag of the element (excluding child elements)

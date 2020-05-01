@@ -17,6 +17,16 @@
 			<file_lib>undicht_core/implementation/file/fstream/libfstream_file.so</file_lib>
 		</UND_UNIX>
 	</core_libraries>
+	<Rendering>
+		<_3D>
+			<SimpleForward>
+				<info> a very simple 3D renderer used mainly for development and debugging </info>
+				<init_from>src/3D/shader/simple_forward.glsl</init_from>
+				<enable_depth_test>true</enable_depth_test>
+				<cull_back_face>true</cull_back_face>
+			</SimpleForward>
+		</_3D>
+	</Rendering>
 </engine>
 
 

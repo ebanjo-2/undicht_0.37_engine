@@ -1,5 +1,6 @@
 #include "engine.h"
 #include <core/core.h>
+#include <core/event_logger.h>
 #include <core/string_tools.h>
 
 #include <window/window_lib.h>
@@ -8,7 +9,8 @@
 #include <file/file_lib.h>
 
 #include <engine/file_loading/xml/xml_file.h>
-#include <engine/file_loading/engine_config.h>
+
+#include <3D/master_renderer_3d.h>
 
 
 
@@ -76,18 +78,21 @@ namespace undicht {
         FileLib::initialize();
 
         // loading the other library file names from the config
-        EngineConfig config_reader(engine_config);
-        std::string window_lib, graphics_lib, audio_lib, file_lib;
-        config_reader.getLibraries(window_lib, graphics_lib, audio_lib, file_lib);
-
-        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);
+        XmlFile config_reader(engine_config);
+        processConfig(config_reader);
 
         initialize();
+
+        MasterRenderer3D::initialize(config_reader);
+
+        config_reader.close();
     }
 
 
     void Engine::terminate() {
         /// to be called when the engine is no longer used
+
+        MasterRenderer3D::terminate();
 
         FileLib::terminate();
         AudioLib::terminate();
@@ -99,6 +104,39 @@ namespace undicht {
         WindowLib::terminate();
 
         Core::terminate();
+
+    }
+
+                //////////////////////////////////// functions to process .und config files ///////////////////////////////
+
+    void Engine::processConfig(XmlFile& config) {
+
+
+#ifdef UND_UNIX
+        XmlElement* core_libs = config.getElement({"engine", "core_libraries", "UND_UNIX"});
+#endif // UND_UNIX
+
+#ifdef UND_WINDOWS
+        XmlElement* core_libs = config.getElement({"engine", "core_libraries", "UND_WINDOWS"});
+#endif // UND_WINDOWS
+
+        if(!core_libs || !core_libs->hasChildElements({"window_lib", "graphics_lib", "audio_lib", "file_lib"})) {
+            // should work even if core_libs is a nullptr
+            EventLogger::storeNote(Note(UND_ERROR, "ERROR: failed to read engine config, initializing with default settings", UND_CODE_ORIGIN));
+            return;
+        }
+
+        std::string window_lib, graphics_lib, audio_lib, file_lib;
+
+        std::string file_path = core::getFilePath(config.getFileName());
+
+        window_lib = file_path + core_libs->getElement({"window_lib"})->getContent();
+        graphics_lib = file_path + core_libs->getElement({"graphics_lib"})->getContent();
+        audio_lib = file_path + core_libs->getElement({"audio_lib"})->getContent();
+        file_lib = file_path + core_libs->getElement({"file_lib"})->getContent();
+
+
+        Core::setLibraryPaths(window_lib, graphics_lib, audio_lib, file_lib);
 
     }
 

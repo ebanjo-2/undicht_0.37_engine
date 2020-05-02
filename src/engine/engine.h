@@ -31,7 +31,8 @@ namespace undicht {
             static void initialize(const std::string& window, const std::string& video, const std::string& audio, const std::string& file);
 
             /**  initializes the engine with the libraries from the engine_config file
-            * @param file_library: if no file_library is given, the default library will be used to read the config */
+            * @param file_library: if no file_library is given, the default library will be used to read the config
+            * will also initialize the MasterRenderer3D if the settings are provided in the config */
             static void initialize(const std::string& engine_config, const std::string& file_library = "");
 
             /// to be called when the engine is no longer used

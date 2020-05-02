@@ -8,9 +8,19 @@
 
 namespace undicht {
 
+    class MasterRenderer3D;
 
     class Renderer3D : protected graphics::Renderer {
         /** the base class to all 3D Renderers of the undicht engine */
+
+        protected:
+
+            friend MasterRenderer3D;
+
+            graphics::Shader m_shader;
+
+            bool m_enable_depth_test = false;
+            bool m_cull_back_face = false;
 
         public:
             // general rendering settings
@@ -29,7 +39,14 @@ namespace undicht {
 
             /** loads the settings stored in the file for the renderer with the name
             * the renderer config should be stored at engine/Rendering/_3D/ */
-            void loadSettings(XmlElement& config, const std::string& name);
+            void loadSettings(XmlElement& config, const std::string& name, const std::string& file_path);
+
+        public:
+            // rendering functions
+
+            /** to be called before the renderer is used
+            * activates the settings saved to the renderer */
+            void prepare();
 
         public:
 

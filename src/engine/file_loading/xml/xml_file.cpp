@@ -25,6 +25,7 @@ namespace undicht {
 
         if(!m_shared_lib_object->open(file_name)) {
             // failed to open
+            m_shared_lib_object->close();
             return false;
         }
 
@@ -42,14 +43,17 @@ namespace undicht {
 
                 if(eof()) {
                     // a valid end to the reading
+                    m_shared_lib_object->close();
                     return true;
                 }
                 // reached invalid line
+                m_shared_lib_object->close();
                 return false;
             }
 
         }
 
+        m_shared_lib_object->close();
         return true; // it could have actually worked
     }
 

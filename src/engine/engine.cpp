@@ -83,7 +83,8 @@ namespace undicht {
 
         initialize();
 
-        MasterRenderer3D::initialize(config_reader);
+        MasterRenderer3D::initialize(config_reader, core::getFilePath(engine_config));
+        MasterRenderer3D::setContext(s_main_context, s_main_window);
 
         config_reader.close();
     }

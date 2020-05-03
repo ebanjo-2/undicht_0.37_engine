@@ -49,7 +49,7 @@ namespace undicht {
 
             static void getViewportSize(int& width, int& height);
 
-            static void beginFrame();
+            static void newFrame();
 
             static void endFrame();
 

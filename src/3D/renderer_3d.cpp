@@ -49,6 +49,13 @@ namespace undicht {
 
     }
 
+    void Renderer3D::setFrameBuffer(graphics::FrameBuffer* framebuffer) {
+        /** sets the FrameBuffer that the Renderer should draw to
+        * @param : passing 0 will make the Renderer draw to the visible framebuffer */
+
+        m_frame_buffer = framebuffer;
+    }
+
     //////////////////////////////// to load the renderers setting from a .und config file /////////////////////////////////////////////
 
     void Renderer3D::loadSettings(XmlElement& config, const std::string& name, const std::string& file_path) {
@@ -80,6 +87,7 @@ namespace undicht {
         graphics::Renderer::enableBackFaceCulling(m_cull_back_face);
         graphics::Renderer::enableDepthTest(m_enable_depth_test);
 
+        submit(m_frame_buffer);
         submit(&m_shader);
 
     }

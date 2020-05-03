@@ -80,7 +80,7 @@ namespace undicht {
     }
 
 
-    void MasterRenderer3D::beginFrame() {
+    void MasterRenderer3D::newFrame() {
 
         if(!s_forward_renderer || !s_context || !s_window) {
             EventLogger::storeNote(Note(UND_ERROR, "Renderer3D:ERROR: not initialized or no context/window set", UND_CODE_ORIGIN));

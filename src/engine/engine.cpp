@@ -67,11 +67,13 @@ namespace undicht {
         /**  initializes the engine with the libraries from the engine_config file
         * @param file_library: if no file_library is given, the default library will be used to read the config */
 
+
         if(file_library.compare("")) {
             // the provided file library is going to be used
             Core::setLibraryPaths("", "", "", file_library);
 
         }
+
 
         // initializing only the file library
         Core::initialize(false, false, false, true);
@@ -130,6 +132,8 @@ namespace undicht {
         std::string window_lib, graphics_lib, audio_lib, file_lib;
 
         std::string file_path = core::getFilePath(config.getFileName());
+
+        std::cout << "FILE PATH: " << file_path << "\n";
 
         window_lib = file_path + core_libs->getElement({"window_lib"})->getContent();
         graphics_lib = file_path + core_libs->getElement({"graphics_lib"})->getContent();

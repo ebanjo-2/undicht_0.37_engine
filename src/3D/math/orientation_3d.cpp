@@ -16,6 +16,26 @@ namespace undicht {
         //dtor
     }
 
+
+    //////////////////////////////////////////////// functions to update matrices /////////////////////////////////////////////////
+    // can be reimplemented by other classes to also update their matrices (i.e. view matrix)
+
+    void Orientation3D::updatePosition() {
+        /** called whenever the translation matrix needs to be updated */
+        m_transl_mat = glm::translate(glm::mat4(1.0f), m_position);
+    }
+
+
+    void Orientation3D::updateRotation() {
+
+        m_rot_mat = glm::toMat4(getRotation());
+    }
+
+    void Orientation3D::updateTransf() {
+
+        m_transf_mat = glm::toMat4(getRotation()) * glm::translate(glm::mat4(1.0f), getPosition());
+    }
+
     //////////////////////////////////////////////// translation ////////////////////////////////////////////////
 
     void Orientation3D::setPosition(const glm::vec3& position) {
@@ -37,8 +57,8 @@ namespace undicht {
 
         if(m_update_pos) {
 
-            m_transl_mat = glm::translate(glm::mat4(1.0f), m_position);
-
+            updatePosition();
+            m_update_pos = false;
         }
 
         return m_transl_mat;
@@ -88,7 +108,7 @@ namespace undicht {
 
         if (m_update_rot) {
 
-            m_rot_mat = glm::toMat4(getRotation());
+            updateRotation();
             m_update_rot = false;
         }
 
@@ -114,7 +134,7 @@ namespace undicht {
 
         if(m_update_transf) {
 
-            m_transf_mat = glm::toMat4(getRotation()) * glm::translate(glm::mat4(1.0f), getPosition()) ;
+            updateTransf();
             m_update_transf = false;
 
         }

@@ -1,11 +1,28 @@
 #ifndef CAMERA_3D_H
 #define CAMERA_3D_H
 
+#include <3D/math/orientation_3d.h>
+
 namespace undicht {
 
 
-    class Camera3D {
+    class Camera3D : public Orientation3D {
+
         public:
+
+            glm::mat4 m_view_mat;
+
+        protected:
+            // function called when the transformation matrix needs to be updated, and with it the view matrix
+
+            virtual void updateTransf();
+
+        public:
+            // functions returning camera matrices
+
+            const glm::mat4& getViewMatrix();
+            virtual const glm::mat4& getCameraProjectionMatrix() = 0;
+
 
             Camera3D();
             virtual ~Camera3D();

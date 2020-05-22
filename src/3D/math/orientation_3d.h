@@ -11,7 +11,7 @@ namespace undicht {
     class Orientation3D {
         /** a class that has functions to rotate and translate an Object */
 
-        private:
+        protected:
             // members to store the orientation
 
             Orientation3D* m_relative_orientation = 0;
@@ -28,6 +28,16 @@ namespace undicht {
             glm::mat4 m_rot_mat;
             glm::mat4 m_transf_mat;
 
+        protected:
+            // functions to update matrices
+            // can be reimplemented by other classes to also update their matrices (i.e. view matrix)
+
+            /** called whenever the translation matrix needs to be updated */
+            virtual void updatePosition();
+
+            virtual void updateRotation();
+
+            virtual void updateTransf();
 
         public:
             // translation

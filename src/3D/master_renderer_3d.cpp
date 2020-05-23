@@ -10,9 +10,15 @@ namespace undicht {
 
     const std::string DEFAULT_3D_CONFIG = getFilePath(UND_CODE_SRC_FILE) + "default_renderers.und";
 
-    Renderer3D* MasterRenderer3D::s_forward_renderer = 0;
     window::GraphicsContext* MasterRenderer3D::s_context = 0;
     window::Window* MasterRenderer3D::s_window = 0;
+    graphics::FrameBuffer* MasterRenderer3D::s_scene_framebuffer = 0;
+    Camera3D* MasterRenderer3D::s_scene_camera = 0;
+
+    // Renderers
+    ForwardRenderer* MasterRenderer3D::s_forward_renderer = 0;
+
+
 
     bool MasterRenderer3D::s_update_viewport = true;
 
@@ -46,7 +52,7 @@ namespace undicht {
     void MasterRenderer3D::initialize(XmlElement& config, const std::string& file_path) {
 
         // creating the renderer objects
-        s_forward_renderer = new Renderer3D;
+        s_forward_renderer = new ForwardRenderer;
 
 
         s_forward_renderer->loadSettings(config, "SimpleForward", file_path);
@@ -80,10 +86,25 @@ namespace undicht {
     }
 
 
+    void MasterRenderer3D::setSceneFramebuffer(graphics::FrameBuffer* fbo) {
+        /** the framebuffer the scene gets drawn to
+        * @param : 0 will set the output fbo to be the default framebuffer
+        * which becomes visible after endFrame() gets called*/
+
+        s_scene_framebuffer = fbo;
+    }
+
+    void MasterRenderer3D::setSceneCamera(const Camera3D& cam) {
+        /** the camera which "captures" the current scene */
+
+        s_scene_camera = (Camera3D*)&cam;
+    }
+
+
     void MasterRenderer3D::newFrame() {
 
         if(!s_forward_renderer || !s_context || !s_window) {
-            EventLogger::storeNote(Note(UND_ERROR, "Renderer3D:ERROR: not initialized or no context/window set", UND_CODE_ORIGIN));
+            EventLogger::storeNote(Note(UND_ERROR, "MasterRenderer3D:ERROR: not initialized or no context/window set", UND_CODE_ORIGIN));
             return;
         }
 
@@ -97,6 +118,13 @@ namespace undicht {
 
         // clearing all the framebuffers
         s_forward_renderer->clearFramebuffer(); // default and visible framebuffer
+
+        // loading the camera to all renderers
+        if(s_scene_camera) {
+
+            s_forward_renderer->loadCamera(*s_scene_camera);
+
+        }
 
     }
 

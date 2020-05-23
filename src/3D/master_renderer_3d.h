@@ -9,21 +9,32 @@
 #include <window/window.h>
 #include <window/graphics_context.h>
 
+#include <3D/entities/camera_3d.h>
+#include <3D/entities/model_3d.h>
+#include <3D/renderers/forward_renderer.h>
+
 
 namespace undicht {
 
     class MasterRenderer3D {
-            /** a class that has control over the 3d renderers
-            * and which can hold functions that use more then just one Renderer (i.e. deferred lighting) */
+            /** a class that has control over the 3D scene */
 
         private:
+
+            friend ForwardRenderer;
 
             static window::GraphicsContext* s_context;
             static window::Window* s_window;
 
-            static Renderer3D* s_forward_renderer;
+            static graphics::FrameBuffer* s_scene_framebuffer;
+            static Camera3D* s_scene_camera;
 
             static bool s_update_viewport; // always update the viewport size to the size of the window
+
+        public:
+            // Renderers
+
+            static ForwardRenderer* s_forward_renderer;
 
         public:
 
@@ -49,9 +60,18 @@ namespace undicht {
 
             static void getViewportSize(int& width, int& height);
 
+            /** the framebuffer the scene gets drawn to
+            * @param : 0 will set the output fbo to be the default framebuffer
+            * which becomes visible after endFrame() gets called*/
+            static void setSceneFramebuffer(graphics::FrameBuffer* fbo);
+
+            /** the camera which "captures" the current scene */
+            static void setSceneCamera(const Camera3D& cam);
+
             static void newFrame();
 
             static void endFrame();
+
 
         public:
 

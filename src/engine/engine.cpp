@@ -133,8 +133,6 @@ namespace undicht {
 
         std::string file_path = core::getFilePath(config.getFileName());
 
-        std::cout << "FILE PATH: " << file_path << "\n";
-
         window_lib = file_path + core_libs->getElement({"window_lib"})->getContent();
         graphics_lib = file_path + core_libs->getElement({"graphics_lib"})->getContent();
         audio_lib = file_path + core_libs->getElement({"audio_lib"})->getContent();

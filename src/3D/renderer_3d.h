@@ -6,6 +6,10 @@
 
 #include <graphics/renderer.h>
 #include <graphics/frame_buffer.h>
+#include <graphics/uniform.h>
+
+
+#include <3D/entities/camera_3d.h>
 
 namespace undicht {
 
@@ -23,6 +27,13 @@ namespace undicht {
             bool m_enable_depth_test = false;
             bool m_cull_back_face = false;
             graphics::FrameBuffer* m_frame_buffer = 0;
+
+        protected:
+            // uniforms most 3D renderers use
+
+            graphics::Uniform m_view_uniform; // camera orientation
+            graphics::Uniform m_proj_uniform; // camera projection
+            graphics::Uniform m_model_uniform; // model orientation
 
         public:
             // general rendering settings
@@ -53,6 +64,14 @@ namespace undicht {
             /** to be called before the renderer is used
             * activates the settings saved to the renderer */
             virtual void prepare();
+
+        protected:
+            // functions that only should be used by the MasterRenderer or child classes
+
+            virtual void loadCamera(Camera3D& cam);
+
+            virtual void loadModelOrientation(Orientation3D& orientation);
+
 
         public:
 

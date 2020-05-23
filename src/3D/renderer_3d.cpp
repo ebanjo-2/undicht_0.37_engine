@@ -1,5 +1,10 @@
 #include "renderer_3d.h"
 #include <core/event_logger.h>
+#include <core/types.h>
+
+
+#include <glm/glm/gtc/type_ptr.hpp>
+
 
 
 namespace undicht {
@@ -74,6 +79,10 @@ namespace undicht {
         enableDepthTest(!settings->getElement({"enable_depth_test"})->getContent().compare("true"));
         setCullBackface(!settings->getElement({"cull_back_face"})->getContent().compare("true"));
 
+        // uniform names (may also be stored in the file in the future, but for now im using preset names)
+        m_view_uniform.setName("view");
+        m_proj_uniform.setName("proj");
+        m_model_uniform.setName("model");
 
     }
 
@@ -90,6 +99,24 @@ namespace undicht {
         submit(m_frame_buffer);
         submit(&m_shader);
 
+    }
+
+                //////////////////////////////// functions that only should be used by the MasterRenderer or child classes ////////////////////////////////
+
+    void Renderer3D::loadCamera(Camera3D& cam) {
+
+        m_view_uniform.setData(glm::value_ptr(cam.getViewMatrix()), UND_MAT4F);
+        m_proj_uniform.setData(glm::value_ptr(cam.getCameraProjectionMatrix()), UND_MAT4F);
+
+        m_shader.loadUniform(m_view_uniform);
+        m_shader.loadUniform(m_proj_uniform);
+    }
+
+    void Renderer3D::loadModelOrientation(Orientation3D& orientation) {
+
+        m_model_uniform.setData(glm::value_ptr(orientation.getTransfMat()), UND_MAT4F);
+
+        m_shader.loadUniform(m_model_uniform);
     }
 
 

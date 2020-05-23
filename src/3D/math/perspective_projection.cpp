@@ -75,7 +75,8 @@ namespace undicht {
         /** @return the projection matrix that can transform 3D positions into screen space */
 
         if(m_update_proj) {
-            m_proj_mat = glm::perspective(m_field_of_view, m_aspect_ratio, m_near_plane, m_far_plane);
+            // fov for some reason has to be in degrees
+            m_proj_mat = glm::perspective(glm::degrees(m_field_of_view), m_aspect_ratio, m_near_plane, m_far_plane);
             m_update_proj = false;
         }
 

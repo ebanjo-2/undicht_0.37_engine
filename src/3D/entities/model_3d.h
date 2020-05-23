@@ -7,7 +7,7 @@
 namespace undicht {
 
 
-    class Model3D : public TexturedMesh, Orientation3D {
+    class Model3D : public TexturedMesh, public Orientation3D {
         /** a class giving a textured mesh a 3D orientation*/
         public:
 

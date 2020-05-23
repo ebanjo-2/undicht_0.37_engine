@@ -15,8 +15,8 @@ namespace undicht {
     }
 
     void Camera3D::updateTransf() {
-
-        m_view_mat = glm::toMat4(getRotation()) * glm::translate(glm::mat4(1.0f), -1.0f * getPosition());
+        // rotation has to be reversed too, but i dont know if -1 * getRotation()) * glm::translate(glm::mat4(1.0f) is right
+        m_view_mat = glm::toMat4(-1.0f * getRotation()) * glm::translate(glm::mat4(1.0f), -1.0f * getPosition());
         m_transf_mat = glm::toMat4(getRotation()) * glm::translate(glm::mat4(1.0f), getPosition());
     }
 

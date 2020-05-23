@@ -16,9 +16,9 @@ namespace undicht {
 
             float m_field_of_view = 1.75; // about 100 degrees of vision
 
-            // captured height / width
-            // i have a resolution of 1050 / 1680, so aspect ratio is 0.625
-            float m_aspect_ratio = 0.625;
+            // captured width / height
+            // i have a resolution of 1680 / 1050, so default aspect ratio is 1.6
+            float m_aspect_ratio = 1.6;
 
             // whether to update the projection matrix
             bool m_update_proj = true;
@@ -37,8 +37,8 @@ namespace undicht {
             void setFoV(float fov);
             float getFoV();
 
-            /** captured height / width
-            * i have a resolution of 1050 / 1680, so default aspect ratio is 0.625 */
+            /** captured width / height
+            * i have a resolution of 1680 / 1050, so default aspect ratio is 1.6 */
             void setAspectRatio(float aspect_ratio);
             float getAspectRatio();
 

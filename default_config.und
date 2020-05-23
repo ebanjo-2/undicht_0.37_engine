@@ -23,7 +23,7 @@
 				<info> a very simple 3D renderer used mainly for development and debugging </info>
 				<init_from>src/3D/shader/simple_forward.glsl</init_from>
 				<enable_depth_test>true</enable_depth_test>
-				<cull_back_face>true</cull_back_face>
+				<cull_back_face>false</cull_back_face>
 			</SimpleForward>
 		</_3D>
 	</Rendering>

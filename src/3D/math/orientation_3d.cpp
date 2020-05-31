@@ -5,11 +5,15 @@
 #include <glm/glm/gtx/quaternion.hpp>
 #include <glm/glm/gtc/type_ptr.hpp>
 
+#include <iostream>
+
 
 namespace undicht {
 
     Orientation3D::Orientation3D() {
-        //ctor
+        // ctor
+        m_rotation = glm::angleAxis(0.0f, glm::vec3(0,0,-1));
+        m_position = glm::vec3(0,0,0);
     }
 
     Orientation3D::~Orientation3D() {
@@ -29,6 +33,7 @@ namespace undicht {
     void Orientation3D::updateRotation() {
 
         m_rot_mat = glm::toMat4(getRotation());
+
     }
 
     void Orientation3D::updateTransf() {

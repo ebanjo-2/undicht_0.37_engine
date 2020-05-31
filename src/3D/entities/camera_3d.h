@@ -11,17 +11,22 @@ namespace undicht {
         public:
 
             glm::mat4 m_view_mat;
+            glm::vec3 m_view_dir;
 
         protected:
             // function called when the transformation matrix needs to be updated, and with it the view matrix
 
             virtual void updateTransf();
+            virtual void updateRotation();
 
         public:
             // functions returning camera matrices
 
             const glm::mat4& getViewMatrix();
             virtual const glm::mat4& getCameraProjectionMatrix() = 0;
+
+            /** a unit vector pointing in the direction the camera is "facing" */
+            const glm::vec3& getViewDirection();
 
 
             Camera3D();

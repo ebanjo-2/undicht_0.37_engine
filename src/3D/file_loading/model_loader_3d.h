@@ -2,7 +2,8 @@
 #define MODEL_LOADER_3D_H
 
 #include <vector>
-#include <graphics/textured_mesh.h>
+#include <3D/entities/model_3d.h>
+#include <graphics/model_loader.h>
 
 
 namespace undicht {
@@ -11,19 +12,13 @@ namespace undicht {
     class ModelLoader3D {
         /** base class to all classes that load 3D models,
         * providing them with some commonly used functions */
+
         public:
+            // model loading api
 
-            /** some file formats may store the attributes in a different order (i.e. pos, uv, normal or pos, normal, uv)
-            * and with them the attribute indices. since undicht uses always the same order (pos, uv, normal), the indices may have to be rearranged
-            * @param attribute_indices: the indices as they come from the file, @param new_order: the way they have to be rearranged to form the default order */
-            virtual void rearrangeAttribIndices(const std::vector<int>& attrib_indices, std::vector<int> new_order, std::vector<int>& loadTo);
-
-            /** takes an attribute (size determined by vertex_layout, can be UND_FLOAT, UND_VEC3F, ...) from each attribute_data list,
-            * which attribute is determined by the attribute index, to build the vertices */
-            virtual void buildVertices(std::vector<std::vector<float>>& attribute_data, const std::vector<int>& attribute_indices, const core::BufferLayout& vertex_layout, std::vector<float>& loadTo);
-
-            /** easier way to load an Image File to a texture */
-            virtual void loadTexture(graphics::Texture& texture, const std::string& file_name);
+            /** if the loaded model contains submodels,
+            * they should be placed into the models m_child_models vector */
+            virtual void loadModel(const Model3D& loadTo);
 
 
             ModelLoader3D();

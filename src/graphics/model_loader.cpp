@@ -12,6 +12,11 @@ namespace undicht {
         //dtor
     }
 
+
+
+    //////////////////////////////////////// building vertices ////////////////////////////////////////
+
+
     void ModelLoader::rearrangeAttribIndices(const std::vector<int>& attrib_indices, std::vector<int> new_order, std::vector<int>& loadTo) {
         /** some file formats may store the attributes in a different order (i.e. pos, uv, normal or pos, normal, uv)
         * and with them the attribute indices. since undicht uses always the same order (pos, uv, normal), the indices may have to be rearranged
@@ -41,14 +46,14 @@ namespace undicht {
         int attributes_per_vertex = vertex_layout.m_types.size();
         int vertex_count = attribute_indices.size() / attributes_per_vertex;
 
-        std::cout << "attributes: " << attributes_per_vertex << " vertex_count: " << vertex_count << "\n";
+        //std::cout << "attributes: " << attributes_per_vertex << " vertex_count: " << vertex_count << "\n";
 
         std::vector<int> attribute_sizes; // the number of floats of each attribute used in a vertex
 
         for(int attribute_type : vertex_layout.m_types) {
 
             attribute_sizes.push_back(core::getNumberOfComponents(attribute_type));
-            std::cout << "attribute size: " << core::getNumberOfComponents(attribute_type) << "\n";
+            //std::cout << "attribute size: " << core::getNumberOfComponents(attribute_type) << "\n";
         }
 
         for(int vertex_id = 0; vertex_id < vertex_count; vertex_id++) {
@@ -69,6 +74,58 @@ namespace undicht {
         }
 
     }
+
+
+    //////////////////////////////////////// building indices ////////////////////////////////////////
+
+    void ModelLoader::buildIndices(const std::vector<float>& vertices, const core::BufferLayout& vertex_layout, std::vector<float>& loadTo_vertices, std::vector<int>& loadTo_indices) {
+        /** removes double vertices by adding indices referencing the first version of that vertex to the loadTo_indices vector*/
+
+        int vertex_size = vertex_layout.getTotalSize() / sizeof(float);
+        int vertex_count = vertices.size() / vertex_size;
+
+        for(int vertex = 0; vertex < vertex_count; vertex++) {
+
+            int indexed_vertex; // the index of the vertex in loadTo_vertices equal to the current vertex
+            bool vertices_are_equal = false; // (only if this is true)
+
+            // comparing the vertex to the ones that where already confirmed unique
+            for(indexed_vertex = 0; indexed_vertex < loadTo_vertices.size() / vertex_size; indexed_vertex++) {
+
+                vertices_are_equal = true;
+
+                // testing if one float is different
+                for(int f = 0; f < vertex_size; f++) {
+
+                    if(vertices.at(vertex * vertex_size + f) != loadTo_vertices.at(indexed_vertex * vertex_size + f)) {
+                        // vertices are not equal
+                        vertices_are_equal = false;
+                        break;
+                    }
+
+                }
+
+                if(vertices_are_equal) {
+                    // found one, adding the index to the indices list
+                    //std::cout << "found an redundant vertex " << "\n";
+                    loadTo_indices.push_back(indexed_vertex);
+                    break;
+                }
+
+            }
+
+            if(!vertices_are_equal) {
+                // no equal vertices were found, so adding the vertex to loadTo_vertices
+               // std::cout << "vertex is unique" << "\n";
+                loadTo_indices.push_back(loadTo_vertices.size() / vertex_size);
+                loadTo_vertices.insert(loadTo_vertices.end(), vertices.begin() + vertex * vertex_size, vertices.begin() + (vertex + 1) * vertex_size);
+            }
+
+        }
+
+    }
+
+    //////////////////////////////////////// loading other assets ////////////////////////////////////////
 
 
     void ModelLoader::loadTexture(graphics::Texture& texture, const std::string& file_name) {

@@ -17,7 +17,7 @@ namespace undicht {
 
             /** takes an attribute (size determined by vertex_layout, can be UND_FLOAT, UND_VEC3F, ...) from each attribute_data list,
             * which attribute is determined by the attribute index, to build the vertices */
-            virtual void buildVertices(std::vector<std::vector<float>>& attribute_data, const std::vector<int>& attribute_indices, const core::BufferLayout& vertex_layout, std::vector<float>& loadTo);
+            virtual void buildVertices(const std::vector<std::vector<float>>& attribute_data, const std::vector<int>& attribute_indices, const core::BufferLayout& vertex_layout, std::vector<float>& loadTo);
 
         public:
             // building indices

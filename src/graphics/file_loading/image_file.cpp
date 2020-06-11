@@ -41,7 +41,7 @@ namespace undicht {
 
 
         //loading the image data
-        unsigned char* data = stbi_load(m_file_name.data(), &width, &height, &nr_channels, STBI_rgb_alpha);
+        unsigned char* data = stbi_load(m_file_name.data(), &width, &height, &nr_channels, 0);
 
         if(data) { //testing whether the image could be loaded or not
 
@@ -69,7 +69,6 @@ namespace undicht {
 
             layout.m_types.push_back(UND_UNSIGNED_CHAR);
         }
-
 
         texture.setPixelFormat(layout);
         texture.setSize(width, height);

@@ -22,51 +22,34 @@ namespace undicht {
     //////////////////////////////////////////////////////// 3D ////////////////////////////////////////////////////////
 
     void SimpleGeometryGenerator::genCube(std::vector<float>& loadTo, float size) {
-        std::vector<int> face_indices = {0,1,2, 0,2,3};
 
-        for(int positive_direction = 0; positive_direction < 2; positive_direction++) {
+        std::vector<float> vertex_positions = {
+            -0.5,-0.5, -0.5,
+            0.5, -0.5, -0.5,
+            0.5, -0.5,  0.5,
+            -0.5,-0.5,  0.5, // bottom
 
-            for(int axis = 0; axis < 3; axis++) {
+            -0.5, 0.5, -0.5,
+            0.5,  0.5, -0.5,
+            0.5,  0.5, 0.5,
+            -0.5, 0.5, 0.5 // top
+        };
 
-                for(int vertex = 0; vertex < 6; vertex++) {
-
-                    bool facing_x = !(bool)(axis - 0);
-                    bool facing_y = !(bool)(axis - 1);
-                    bool facing_z = !(bool)(axis - 2);
-
-                    int index;
-                    if(positive_direction)
-                        index = face_indices[vertex];
-                    if(!positive_direction)
-                        index = face_indices[6 - vertex]; // switching the order of the positions
-
-                    float x,y,z;
-
-                    if(facing_x) {
-                        x = -0.5f + positive_direction;
-                        y = -0.5f + ((index == 1) || (index == 2) ? 0:1);
-                        z = -0.5f + (index > 1 ? 0:1);
-                    }
-
-                    if(facing_y) {
-                        x = -0.5f + (index > 1 ? 0:1);
-                        y = -0.5f + positive_direction;
-                        z = -0.5f + ((index == 1) || (index == 2) ? 0:1);
-                    }
-
-                    if(facing_z) {
-                        x = -0.5f + ((index == 1) || (index == 2) ? 0:1);
-                        y = -0.5f + (index > 1 ? 0:1);
-                        z = -0.5f + positive_direction;
-                    }
-
-                    loadTo.insert(loadTo.end(), {x * size, y * size, z * size});
-
-                }
-
-            }
-
+        // scaling the vertex positions
+        for(float& f : vertex_positions) {
+            f *= size;
         }
+
+        const std::vector<int> face_indices = {
+            0, 1, 3, 1, 2, 3, // bottom
+            4, 7, 5, 5, 7, 6, // top
+            0, 3, 4, 3, 7, 4, // left
+            2, 5, 6, 2, 1, 5, // right
+            3, 2, 6, 3, 6, 7, // front
+            0, 4, 1, 1, 4, 5  // back
+        };
+
+        buildVertices({vertex_positions}, face_indices, BufferLayout({UND_VEC3F}), loadTo);
 
     }
 

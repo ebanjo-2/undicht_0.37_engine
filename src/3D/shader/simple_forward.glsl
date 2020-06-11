@@ -10,12 +10,13 @@ uniform mat4 proj;
 uniform mat4 model;
 uniform float scale = 10.0f;
 
-out vec3 positional_color;
+out vec2 uv;
 
 void main() {
 	
-	positional_color = normalize(aPos);
-	gl_Position = proj * view * model * vec4(10 * aPos, 1.0);
+	//uv = aUv;
+    uv = aPos.xy + 0.5;
+	gl_Position = proj * view * model * vec4(aPos, 1.0);
 
 }
 
@@ -26,10 +27,12 @@ void main() {
 
 out vec4 FragColor;
 
-in vec3 positional_color;
+in vec2 uv;
+
+uniform sampler2D mesh_texture;
 
 void main() {
 
-	FragColor = vec4(positional_color.xxz, 1.0);
+	FragColor = texture(mesh_texture, uv);
 	//FragColor = vec4(1.0,1.0,1.0,1.0);
 }

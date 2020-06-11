@@ -39,7 +39,7 @@ namespace undicht {
     }
 
 
-    void ModelLoader::buildVertices(std::vector<std::vector<float>>& attribute_data, const std::vector<int>& attribute_indices, const core::BufferLayout& vertex_layout, std::vector<float>& loadTo) {
+    void ModelLoader::buildVertices(const std::vector<std::vector<float>>& attribute_data, const std::vector<int>& attribute_indices, const core::BufferLayout& vertex_layout, std::vector<float>& loadTo) {
         /** takes an attribute (size determined by vertex_layout, can be UND_FLOAT, UND_VEC3F, ...) from each attribute_data list,
         * which attribute is determined by the attribute index, to build the vertices */
 
@@ -62,11 +62,11 @@ namespace undicht {
             for(int attrib = 0; attrib < attributes_per_vertex; attrib++) {
                 // going through each attribute
 
-                std::vector<float>& current_attrib_list = attribute_data.at(attrib);
+                const std::vector<float>& current_attrib_list = attribute_data.at(attrib);
                 int index = attribute_indices.at(vertex_id * attributes_per_vertex + attrib);
 
-                std::vector<float>::iterator data_begin = current_attrib_list.begin() + index * attribute_sizes.at(attrib);
-                std::vector<float>::iterator data_end = data_begin + attribute_sizes.at(attrib);
+                std::vector<float>::const_iterator data_begin = current_attrib_list.begin() + index * attribute_sizes.at(attrib);
+                std::vector<float>::const_iterator data_end = data_begin + attribute_sizes.at(attrib);
 
                 loadTo.insert(loadTo.end(), data_begin, data_end);
             }

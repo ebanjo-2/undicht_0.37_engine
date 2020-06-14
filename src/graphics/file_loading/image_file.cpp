@@ -46,7 +46,7 @@ namespace undicht {
         if(data) { //testing whether the image could be loaded or not
 
             //loading the data to the texture
-            image_data.insert(image_data.begin(), data, data + width * height * 4 * sizeof(char));
+            image_data.insert(image_data.begin(), data, data + width * height * nr_channels * sizeof(char));
 
         } else {
 

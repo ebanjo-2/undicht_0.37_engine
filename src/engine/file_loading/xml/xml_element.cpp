@@ -78,16 +78,18 @@ namespace undicht {
         return m_content; // this one is easy
     }
 
-    const XmlTagAttrib& XmlElement::getAttribute(const std::string& attr_name) {
+    const XmlTagAttrib* XmlElement::getAttribute(const std::string& attr_name) {
 
         for(XmlTagAttrib& attr : m_tag_attributes) {
 
             if(!attr.m_name.compare(attr_name)) {
 
-                return attr;
+                return &attr;
             }
 
         }
+
+        return 0;
     }
 
     XmlElement* XmlElement::getElement(const std::vector<std::string>& attribute_strings, int attrib_num){
@@ -121,14 +123,14 @@ namespace undicht {
         return 0;
     }
 
-    const std::vector<const XmlElement*> XmlElement::getAllElements(const std::vector<std::string>& attribute_strings, int attrib_num){
+    std::vector<XmlElement*> XmlElement::getAllElements(const std::vector<std::string>& attribute_strings, int attrib_num){
         /** @return all xml elements that have all the requested tag attributes */
 
         // splitting the attributes
         std::string elem_name;
         std::vector<std::string> attributes = splitAttributeString(attribute_strings.at(attrib_num), elem_name);
 
-        std::vector<const XmlElement*> elements;
+        std::vector<XmlElement*> elements;
 
         // searching for child elements
         for(XmlElement& elem : m_child_elements) {
@@ -142,7 +144,7 @@ namespace undicht {
                 } else {
                     // the search continues
 
-                    std::vector<const XmlElement*> new_elements = elem.getAllElements(attribute_strings, attrib_num + 1);
+                    std::vector<XmlElement*> new_elements = elem.getAllElements(attribute_strings, attrib_num + 1);
                     elements.insert(elements.end(), new_elements.begin(), new_elements.end());
                 }
 

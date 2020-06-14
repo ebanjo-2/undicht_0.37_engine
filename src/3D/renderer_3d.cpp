@@ -83,6 +83,7 @@ namespace undicht {
         m_view_uniform.setName("view");
         m_proj_uniform.setName("proj");
         m_model_uniform.setName("model");
+        m_model_scale.setName("scale");
 
     }
 
@@ -118,6 +119,14 @@ namespace undicht {
 
         m_shader.loadUniform(m_model_uniform);
     }
+
+    void Renderer3D::loadModelScale(const glm::vec3& scale) {
+
+        m_model_scale.setData(glm::value_ptr(scale), UND_VEC3F);
+
+        m_shader.loadUniform(m_model_scale);
+    }
+
 
 
 } // undicht

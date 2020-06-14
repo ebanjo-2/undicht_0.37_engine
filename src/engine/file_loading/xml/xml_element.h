@@ -40,7 +40,7 @@ namespace undicht {
             /// @return the content stored between the start and end tag of the element (excluding child elements)
             const std::string& getContent() const;
 
-            const XmlTagAttrib& getAttribute(const std::string& attrib_name);
+            const XmlTagAttrib* getAttribute(const std::string& attrib_name);
 
 
             /** searches the elements children for the first one which has the attributes stored in the attribute string at attrib_num
@@ -50,7 +50,7 @@ namespace undicht {
             XmlElement* getElement(const std::vector<std::string>& attribute_strings, int attrib_num = 0);
 
             /** @return all xml elements that have all the requested tag attributes */
-            const std::vector<const XmlElement*> getAllElements(const std::vector<std::string>& attribute_strings, int attrib_num = 0);
+            std::vector<XmlElement*> getAllElements(const std::vector<std::string>& attribute_strings, int attrib_num = 0);
 
             /// the attribute string should look like this "name attr0=val0 attr1=val1 ..."
             std::vector<std::string> splitAttributeString(std::string attribute_string, std::string& loadTo_name) const;

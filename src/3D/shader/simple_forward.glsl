@@ -8,15 +8,14 @@ layout (location = 2) in vec3 aNormal;
 uniform mat4 view;
 uniform mat4 proj;
 uniform mat4 model;
-uniform float scale = 10.0f;
+uniform vec3 scale;
 
 out vec2 uv;
 
 void main() {
 	
-	//uv = aUv;
-    uv = aPos.xy + 0.5;
-	gl_Position = proj * view * model * vec4(aPos, 1.0);
+	uv = aUv;
+	gl_Position = proj * view * model * vec4(aPos * scale, 1.0);
 
 }
 

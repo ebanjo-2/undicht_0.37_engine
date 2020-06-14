@@ -14,12 +14,23 @@ namespace undicht {
     void ForwardRenderer::drawModel(Model3D& model) {
         /** draws the model with its child models to the scene framebuffer */
 
-        submit(&model.getMesh());
-        m_shader.loadTexture(model.getTexture());
+        if(model.getMesh().getSize()) {
 
-        loadModelOrientation(model);
+            submit(&model.getMesh());
+            m_shader.loadTexture(model.getTexture());
 
-        draw();
+            loadModelOrientation(model);
+            loadModelScale(model.getScale());
+
+            draw();
+
+        }
+
+        // drawing sub models
+        for(Model3D& m : model.m_child_models) {
+
+            drawModel(m);
+        }
 
     }
 

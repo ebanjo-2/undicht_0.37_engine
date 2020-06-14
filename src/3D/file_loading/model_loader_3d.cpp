@@ -18,7 +18,7 @@ namespace undicht {
     //////////////////////////////////////////////////// model loading api ////////////////////////////////////////////////////
 
 
-    void ModelLoader3D::loadModel(const Model3D& loadTo) {
+    void ModelLoader3D::loadModel(Model3D& loadTo) {
         /** if the loaded model contains submodels,
         * they should be placed into the models m_child_models vector */
 

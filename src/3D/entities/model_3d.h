@@ -13,7 +13,12 @@ namespace undicht {
 
             std::vector<Model3D> m_child_models;
 
+            glm::vec3 m_scale = glm::vec3(1.0f); // scaling of the model in 3 directions
+
         public:
+
+            void setScale(const glm::vec3& scale);
+            const glm::vec3& getScale();
 
             /** @return a model that has an orientation relative to this model */
             Model3D& addChildModel();

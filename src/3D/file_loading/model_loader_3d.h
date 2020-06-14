@@ -9,7 +9,7 @@
 namespace undicht {
 
 
-    class ModelLoader3D {
+    class ModelLoader3D : public ModelLoader {
         /** base class to all classes that load 3D models,
         * providing them with some commonly used functions */
 
@@ -18,7 +18,7 @@ namespace undicht {
 
             /** if the loaded model contains submodels,
             * they should be placed into the models m_child_models vector */
-            virtual void loadModel(const Model3D& loadTo);
+            virtual void loadModel(Model3D& loadTo);
 
 
             ModelLoader3D();

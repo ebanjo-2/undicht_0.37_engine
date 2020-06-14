@@ -34,6 +34,7 @@ namespace undicht {
             graphics::Uniform m_view_uniform; // camera orientation
             graphics::Uniform m_proj_uniform; // camera projection
             graphics::Uniform m_model_uniform; // model orientation
+            graphics::Uniform m_model_scale;
 
         public:
             // general rendering settings
@@ -71,6 +72,8 @@ namespace undicht {
             virtual void loadCamera(Camera3D& cam);
 
             virtual void loadModelOrientation(Orientation3D& orientation);
+
+            virtual void loadModelScale(const glm::vec3& scale);
 
 
         public:

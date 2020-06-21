@@ -18,6 +18,10 @@ namespace undicht {
             * @return the element containing the actual data (float array) (0 if the mesh does not have a source with that name) */
             virtual XmlElement* getMeshSource(XmlElement* mesh, const std::string& source_name);
 
+            // functions to load textures for a material
+
+            virtual void loadMaterialTextures(XmlElement* material, graphics::Texture& loadTo);
+
         public:
 
             /** if the loaded model contains submodels,

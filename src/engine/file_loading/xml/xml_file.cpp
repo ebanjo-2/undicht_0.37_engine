@@ -29,6 +29,8 @@ namespace undicht {
             return false;
         }
 
+        m_child_elements.clear();
+
 
         // the line in which the xml information is stored
         std::string xml_info = getLine();

@@ -16,7 +16,10 @@ namespace undicht {
 
         if(model.getMesh().getSize()) {
 
+
             submit(&model.getMesh());
+
+
             m_shader.loadTexture(model.getTexture());
 
             loadModelOrientation(model);

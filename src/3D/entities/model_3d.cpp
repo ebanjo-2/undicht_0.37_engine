@@ -11,17 +11,6 @@ namespace undicht {
         //dtor
     }
 
-    void Model3D::setScale(const glm::vec3& scale) {
-
-        m_scale = scale;
-    }
-
-
-    const glm::vec3& Model3D::getScale() {
-
-        return m_scale;
-    }
-
     Model3D& Model3D::addChildModel() {
         /** @return a model that has an orientation relative to this model */
 

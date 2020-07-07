@@ -23,7 +23,7 @@ namespace undicht {
             m_shader.loadTexture(model.getTexture());
 
             loadModelOrientation(model);
-            loadModelScale(model.getScale());
+            loadModelScale(model.getWorldScale());
 
             draw();
 

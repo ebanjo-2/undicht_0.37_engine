@@ -18,6 +18,7 @@ namespace undicht {
 
             glm::vec3 m_position;
             glm::quat m_rotation;
+            glm::vec3 m_scale;
 
             // whether the matrices representing the transformations need to be updated
             bool m_update_pos = true;
@@ -26,7 +27,8 @@ namespace undicht {
 
             glm::mat4 m_transl_mat;
             glm::mat4 m_rot_mat;
-            glm::mat4 m_transf_mat;
+            glm::mat4 m_transf_mat; // transformation relative to relative_orientation
+
 
         protected:
             // functions to update matrices
@@ -50,8 +52,8 @@ namespace undicht {
             const glm::mat4& getTranslMat();
 
             // the absolute position in the world
-            const glm::vec3& getWorldPosition();
-            const glm::mat4& getWorldTranslMat();
+            glm::vec3 getWorldPosition();
+            glm::mat4 getWorldTranslMat();
 
             /** moves the object */
             void addTranslation(const glm::vec3& v);
@@ -67,8 +69,19 @@ namespace undicht {
             const glm::mat4& getRotMat();
 
             // the absolute rotation relative to the world
-            const glm::quat& getWorldRot();
-            const glm::mat4& getWorldRotMat();
+            glm::quat getWorldRot();
+            glm::mat4 getWorldRotMat();
+
+        public:
+            // scaling
+
+            /** scaling the translation of child elements + can be used to scale the model */
+            void setScale(const glm::vec3& scale);
+
+            const glm::vec3& getScale();
+
+            // scale multiplied by the scale of the orientations parents
+            glm::vec3 getWorldScale();
 
         public:
             // transformation (translation + rotation combined)
@@ -76,7 +89,7 @@ namespace undicht {
             const glm::mat4& getTransfMat();
 
             // the absolute transformation relative to the world
-            const glm::mat4& getWorldTransfMat();
+            glm::mat4 getWorldTransfMat();
 
             /** sets this orientations transformation (position + rotation) to be relative to the orientation passed
             * @param : if 0 is passed, the transformation will be relative to the world */

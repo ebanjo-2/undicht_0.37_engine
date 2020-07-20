@@ -87,7 +87,7 @@ namespace undicht {
             return m_position;
         } else {
 
-            return glm::vec3(m_relative_orientation->getWorldTransfMat() * glm::vec4(m_position, 1.0f));
+            return m_relative_orientation->getWorldPosition() + glm::rotate(m_relative_orientation->getWorldRot(), m_position);
         }
 
     }

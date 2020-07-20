@@ -21,8 +21,10 @@ namespace undicht {
 
         public:
 
+            virtual void setMesh(const graphics::VertexBuffer& mesh);
             virtual graphics::VertexBuffer& getMesh();
 
+            virtual void setTexture(const graphics::Texture& texture);
             virtual graphics::Texture& getTexture();
 
             TexturedMesh();

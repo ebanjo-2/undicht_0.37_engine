@@ -62,7 +62,7 @@ namespace undicht {
     }
 
 
-    const glm::vec3& Orientation3D::getPosition() {
+    const glm::vec3& Orientation3D::getPosition() const {
 
         return m_position;
     }
@@ -166,7 +166,7 @@ namespace undicht {
 
     }
 
-    const glm::vec3& Orientation3D::getScale() {
+    const glm::vec3& Orientation3D::getScale() const {
 
         return m_scale;
     }

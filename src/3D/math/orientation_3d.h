@@ -47,7 +47,7 @@ namespace undicht {
             void setPosition(const glm::vec3& position);
 
             // the position in relation to the relative orientation
-            const glm::vec3& getPosition();
+            const glm::vec3& getPosition() const;
             /** @return a matrix, that multiplied with a 4D vector (x,y,z,1) will result in a 3D vector (x + pos.x, y + pos.y, z + pos.z, 1) */
             const glm::mat4& getTranslMat();
 
@@ -78,7 +78,7 @@ namespace undicht {
             /** scaling the translation of child elements + can be used to scale the model */
             void setScale(const glm::vec3& scale);
 
-            const glm::vec3& getScale();
+            const glm::vec3& getScale() const;
 
             // scale multiplied by the scale of the orientations parents
             glm::vec3 getWorldScale();

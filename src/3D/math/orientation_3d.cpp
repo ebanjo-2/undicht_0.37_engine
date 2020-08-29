@@ -17,6 +17,8 @@ namespace undicht {
         m_scale = glm::vec3(1,1,1);
     }
 
+
+
     Orientation3D::~Orientation3D() {
         //dtor
     }
@@ -79,7 +81,7 @@ namespace undicht {
         return m_transl_mat;
     }
 
-    glm::vec3 Orientation3D::getWorldPosition() {
+    glm::vec3 Orientation3D::getWorldPosition() const{
         /** @return the position relative to the worlds 0,0,0 */
 
         if(!m_relative_orientation) {
@@ -121,7 +123,7 @@ namespace undicht {
     }
 
 
-    const glm::quat& Orientation3D::getRotation() {
+    const glm::quat& Orientation3D::getRotation() const{
 
         return m_rotation;
     }
@@ -139,7 +141,7 @@ namespace undicht {
     }
 
 
-    glm::quat Orientation3D::getWorldRot() {
+    glm::quat Orientation3D::getWorldRot() const{
         /** @return the absolute rotation relative to the world */
 
         if(!m_relative_orientation) {
@@ -171,7 +173,7 @@ namespace undicht {
         return m_scale;
     }
 
-    glm::vec3 Orientation3D::getWorldScale() {
+    glm::vec3 Orientation3D::getWorldScale() const{
         // scale multiplied by the scale of the orientations parents
 
         if(!m_relative_orientation) {

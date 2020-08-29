@@ -52,7 +52,7 @@ namespace undicht {
             const glm::mat4& getTranslMat();
 
             // the absolute position in the world
-            glm::vec3 getWorldPosition();
+            glm::vec3 getWorldPosition() const;
             glm::mat4 getWorldTranslMat();
 
             /** moves the object */
@@ -65,11 +65,11 @@ namespace undicht {
             // rotation around the orientations world position
             void setRotation(const glm::quat& rot);
 
-            const glm::quat& getRotation();
+            const glm::quat& getRotation() const;
             const glm::mat4& getRotMat();
 
             // the absolute rotation relative to the world
-            glm::quat getWorldRot();
+            glm::quat getWorldRot() const;
             glm::mat4 getWorldRotMat();
 
         public:
@@ -81,7 +81,7 @@ namespace undicht {
             const glm::vec3& getScale() const;
 
             // scale multiplied by the scale of the orientations parents
-            glm::vec3 getWorldScale();
+            glm::vec3 getWorldScale() const;
 
         public:
             // transformation (translation + rotation combined)

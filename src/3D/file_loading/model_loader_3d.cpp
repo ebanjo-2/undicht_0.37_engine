@@ -25,5 +25,10 @@ namespace undicht {
 
     }
 
+    void ModelLoader3D::loadVertexData(std::vector<std::vector<float>>& vertices, std::vector<core::BufferLayout>& layouts) {
+        /** loads the vertex data of all the meshes of the model + their layouts */
+
+    }
+
 
 } // undicht

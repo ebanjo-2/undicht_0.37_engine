@@ -12,7 +12,10 @@ namespace undicht {
         private:
             // functions to bring more structure to the loading process
 
+            virtual void loadGeometry(XmlElement& geometry, std::vector<float>& vertices, core::BufferLayout& vertex_layout);
+
             virtual void loadGeometry(XmlElement& geometry, Model3D& loadTo);
+
 
             /** @param source_name: POSITION, NORMAL or TEXCOORD
             * @return the element containing the actual data (float array) (0 if the mesh does not have a source with that name) */
@@ -23,6 +26,9 @@ namespace undicht {
             virtual void loadMaterialTextures(XmlElement* material, graphics::Texture& loadTo);
 
         public:
+
+            /** loads the vertex data of all the meshes of the model + their layouts */
+            virtual void loadVertexData(std::vector<std::vector<float>>& vertices, std::vector<core::BufferLayout>& vertex_layouts);
 
             /** if the loaded model contains submodels,
             * they should be placed into the models m_child_models vector */

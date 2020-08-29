@@ -16,6 +16,9 @@ namespace undicht {
         public:
             // model loading api
 
+            /** loads the vertex data of all the meshes of the model + their layouts */
+            virtual void loadVertexData(std::vector<std::vector<float>>& vertices, std::vector<core::BufferLayout>& layouts);
+
             /** if the loaded model contains submodels,
             * they should be placed into the models m_child_models vector */
             virtual void loadModel(Model3D& loadTo);

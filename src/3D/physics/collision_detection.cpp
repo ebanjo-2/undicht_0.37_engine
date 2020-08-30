@@ -1,7 +1,15 @@
 #include "collision_detection.h"
+#include <iostream>
 
 
 namespace undicht {
+
+    std::ostream& operator<< (std::ostream& out, const glm::vec3& v) {
+
+        out << v.x << " " << v.y << " " << v.z;
+
+        return out;
+    }
 
     bool CollisionDetection::overlappingRanges(float range_1_start, float range_1_end, float range_2_start, float range_2_end) {
 
@@ -44,31 +52,49 @@ namespace undicht {
         return false;
     }
 
-    bool CollisionDetection::overlappingVolume(const SimplePolygonHitbox& h1, const SimplePolygonHitbox& h2) {
+    bool CollisionDetection::overlappingVolume(const SimplePolygonHitbox& h1, const HitboxPolygon& polygon) {
 
-        // testing if any edges of any of the hitboxes are inside the volume of the other one
-        for(const HitboxPolygon& polygon : h1.m_polygons) {
+        return overlappingVolume(polygon, h1);
+    }
 
-            for(int edge = 0; edge < polygon.m_vertices.size(); edge ++) {
 
-                if(h2.collision(polygon.m_vertices[edge], polygon.m_vertices[(edge + 1) % polygon.m_vertices.size()])) {
+    bool CollisionDetection::overlappingVolume(const HitboxPolygon& polygon, const SimplePolygonHitbox& h1) {
 
-                    return true;
-                }
+        std::vector<glm::vec3> polygon_vertices = polygon.getWorldVertices();
+        int poly_size = polygon_vertices.size();
+
+        for(int i = 0; i < poly_size; i++) {
+            // testing collision with every edge of the polygon
+
+            if(h1.collision(polygon_vertices.at(i), polygon_vertices.at((i + 1) % poly_size))) {
+
+                // line is inside simple hitbox
+                return true;
             }
 
         }
 
-        for(const HitboxPolygon& polygon : h2.m_polygons) {
+        return false;
+    }
 
-            for(int edge = 0; edge < polygon.m_vertices.size(); edge ++) {
+    bool CollisionDetection::overlappingVolume(const SimplePolygonHitbox& h1, const SimplePolygonHitbox& h2) {
 
-                if(h1.collision(polygon.m_vertices[edge], polygon.m_vertices[(edge + 1) % polygon.m_vertices.size()])) {
+        // testing if any edges of any of the hitboxes are inside the volume of the other one
+        for(const HitboxPolygon& polygon : h1.getPolygons()) {
 
-                    return true;
-                }
+            if(overlappingVolume(polygon, h2)) {
+
+                return true;
             }
 
+        }
+
+        for(const HitboxPolygon& polygon : h2.getPolygons()) {
+
+            if(overlappingVolume(polygon, h1)) {
+
+                return true;
+            }
         }
 
         return false;
@@ -79,6 +105,39 @@ namespace undicht {
         if(glm::length(h1.getWorldPosition() - h2.getWorldPosition()) < ((h1.getWorldScale().x + h2.getWorldScale().x) / 2)) {
 
             return true;
+        }
+
+        return false;
+    }
+
+    bool CollisionDetection::overlappingVolume(const SimplePolygonHitbox& h1, const PolygonHitbox& h2) {
+
+        return overlappingVolume(h2, h1);
+    }
+
+    bool CollisionDetection::overlappingVolume(const PolygonHitbox& h1, const SimplePolygonHitbox& h2) {
+
+        for(const SimplePolygonHitbox& simple_hitbox : h1.m_hitboxes) {
+            // testing for collision with all simple hitboxes from h1
+            if(overlappingVolume(simple_hitbox, h2)) {
+
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    bool CollisionDetection::overlappingVolume(const PolygonHitbox& h1, const PolygonHitbox& h2) {
+
+        for(const SimplePolygonHitbox& simple_hitbox : h1.m_hitboxes) {
+            // testing for collision with all simple hitboxes from h2
+            if(overlappingVolume(simple_hitbox, h2)) {
+
+                return true;
+            }
+
         }
 
         return false;

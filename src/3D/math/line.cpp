@@ -1,4 +1,5 @@
 #include "line.h"
+#include <iostream>
 
 namespace undicht {
 
@@ -14,6 +15,7 @@ namespace undicht {
     Line::~Line() {
         //dtor
     }
+
 
     /////////////////////////////////////// defining the line ///////////////////////////////////////
 
@@ -37,6 +39,18 @@ namespace undicht {
         /** @return the positive direction of the line */
 
         return m_direction;
+    }
+
+    ///////////////////// getting the defining attributes of the line with the Orientation3D applied ///////////////////////
+
+    glm::vec3 Line::getWorldPoint() const {
+
+        return getWorldPosition() + getPoint();
+    }
+
+    glm::vec3 Line::getWorldDir() const {
+
+        return glm::rotate(getWorldRot(), getDir());
     }
 
     ///////////////////////////////////// testing whether the line is properly defined /////////////////////////////////////

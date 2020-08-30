@@ -18,7 +18,7 @@ namespace undicht {
 
     ///////////////////////////////////// functions to define the plane /////////////////////////////////////
 
-    void Plane::def(const glm::vec3& point, const glm::vec3& normal){
+    void Plane::def(const glm::vec3& point, const glm::vec3& normal) {
         /** defined by a point on the plane + a normal vector */
 
         m_point = point;
@@ -26,14 +26,14 @@ namespace undicht {
 
     }
 
-    void Plane::def(const glm::vec3& point1, const glm::vec3& point2, const glm::vec3& point3){
+    void Plane::def(const glm::vec3& point1, const glm::vec3& point2, const glm::vec3& point3) {
         /** defined by 3 points on the plane */
 
         m_point = point1;
         m_normal = glm::normalize(glm::cross(point2 - point1, point3 - point1));
     }
 
-    void Plane::defW2D(const glm::vec3& point, const glm::vec3& dir1, const glm::vec3& dir2){
+    void Plane::defW2D(const glm::vec3& point, const glm::vec3& dir1, const glm::vec3& dir2) {
         /** defined by a point on the plane + 2 vectors pointing in two directions on the plane */
 
         m_point = point;
@@ -42,20 +42,34 @@ namespace undicht {
 
     ///////////////////////////////////// getting the defining attributes of the plane /////////////////////////////////////
 
-    const glm::vec3& Plane::getNormal() const{
+    const glm::vec3& Plane::getNormal() const {
         /** @return the normal of the plane */
 
         return m_normal;
     }
 
-    const glm::vec3& Plane::getPoint() const{
+    const glm::vec3& Plane::getPoint() const {
         /** @return a point on the plane */
 
         return m_point;
     }
 
+    ////////////////////////// getting the defining attributes of the plane with the Orientation3D applied //////////////////////////
 
-     ///////////////////////////////////// testing whether the plane is properly defined /////////////////////////////////////
+    glm::vec3 Plane::getWorldNormal() const {
+        /** @return the normal of the plane (in world space)*/
+
+        return glm::rotate(getWorldRot(), getNormal());
+    }
+
+    glm::vec3 Plane::getWorldPoint() const {
+        /** @return a point on the plane (in world space)*/
+
+        return getWorldPosition() + getPoint();
+    }
+
+
+    ///////////////////////////////////// testing whether the plane is properly defined /////////////////////////////////////
 
 
     Plane::operator bool() {

@@ -10,9 +10,11 @@ namespace undicht {
     class SimplePolygonHitbox : public Hitbox {
     /** a hitbox that can have the shape of any object made of polygons with no particular number of vertices
     * that from where ever it is seen has no more then 2 surfaces  */
-        public:
+        protected:
 
             std::vector<HitboxPolygon> m_polygons;
+
+            virtual int getType();
 
         public:
             // collision detection with simple objects
@@ -32,9 +34,16 @@ namespace undicht {
 
             HitboxPolygon& getPolygon(int id);
 
+            void setPolygons(const std::vector<HitboxPolygon>& polygons);
+
+            const std::vector<HitboxPolygon>& getPolygons() const;
+
         public:
 
+            void operator= (const SimplePolygonHitbox& h);
+
             SimplePolygonHitbox();
+            SimplePolygonHitbox(const SimplePolygonHitbox& h);
             virtual ~SimplePolygonHitbox();
 
     };

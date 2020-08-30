@@ -27,8 +27,17 @@ namespace undicht {
             * and they have to be defined in clockwise order when viewed from outside the model */
             virtual void setVertices(const std::vector<glm::vec3>& vertices);
 
+        public:
+            // getting the world positions of the vertices
+
+            virtual glm::vec3 getWorldVertex(int id) const;
+
+            /** @return all vertices transformed into world space */
+            virtual std::vector<glm::vec3> getWorldVertices() const;
+
 
         public:
+            // basic collision detection functions
 
             /** @return false if the point is excluded from the model by this polygon*/
             virtual bool insideModel(const glm::vec3& point) const;
@@ -40,7 +49,11 @@ namespace undicht {
             * -1, if the line and polygon are parallel */
             virtual bool insideModel(const Line& l, float& dir_factor, char& dir) const;
 
+
+            void operator= (const HitboxPolygon& p);
+
             HitboxPolygon();
+            HitboxPolygon(const HitboxPolygon& p);
             HitboxPolygon(const std::vector<glm::vec3>& vertices);
             virtual ~HitboxPolygon();
 

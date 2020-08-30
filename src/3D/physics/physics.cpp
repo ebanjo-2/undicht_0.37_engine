@@ -27,6 +27,13 @@ namespace undicht {
 
             return CollisionDetection::overlappingVolume(*(SimplePolygonHitbox*)&h1, *(SimplePolygonHitbox*)&h2);
 
+        } else if ((h1.getType() == UND_SPHERE_HITBOX) && (h2.getType() == UND_SPHERE_HITBOX)) {
+
+            return CollisionDetection::overlappingVolume(*(SphereHitbox*)&h1, *(SphereHitbox*)&h2);
+
+        }  else if ((h1.getType() == UND_POLYGON_HITBOX) && (h2.getType() == UND_POLYGON_HITBOX)) {
+
+            return CollisionDetection::overlappingVolume(*(PolygonHitbox*)&h1, *(PolygonHitbox*)&h2);
         }
 
         // no known collision detection

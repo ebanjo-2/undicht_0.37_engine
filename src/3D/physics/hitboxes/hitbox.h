@@ -10,6 +10,7 @@ namespace undicht {
     extern int UND_CUBOID_HITBOX;
     extern int UND_SIMPLE_POLYGON_HITBOX;
     extern int UND_SPHERE_HITBOX;
+    extern int UND_POLYGON_HITBOX;
 
 
     class Hitbox : public Orientation3D {

@@ -1,21 +1,44 @@
 #include "hitbox_polygon.h"
 #include <3D/math/relations.h>
+#include <core/event_logger.h>
+#include <3D/physics/collision_detection.h>
 
 
 namespace undicht {
 
+    using namespace core;
+
     HitboxPolygon::HitboxPolygon() {
         //ctor
+
+        m_plane.setTransfRelTo(this);
+
     }
 
     HitboxPolygon::HitboxPolygon(const std::vector<glm::vec3>& vertices) {
 
         setVertices(vertices);
+        m_plane.setTransfRelTo(this);
+
+    }
+
+    HitboxPolygon::HitboxPolygon(const HitboxPolygon& p) {
+
+        *this = p;
     }
 
     HitboxPolygon::~HitboxPolygon() {
         //dtor
     }
+
+    void HitboxPolygon::operator= (const HitboxPolygon& p) {
+
+        m_vertices = p.m_vertices;
+        m_plane = p.m_plane;
+
+        m_plane.setTransfRelTo(this);
+    }
+
 
 
     void HitboxPolygon::setVertices(const std::vector<glm::vec3>& vertices) {
@@ -24,25 +47,46 @@ namespace undicht {
 
         if(vertices.size() < 3) {
 
+            EventLogger::storeNote(Note(UND_ERROR, "failed to init hitbox polygon, not enough vertices", UND_CODE_ORIGIN));
             return;
         }
 
         m_plane.def(vertices[0], vertices[1], vertices[2]);
+
         m_vertices = vertices;
 
     }
 
-    bool HitboxPolygon::insideModel(const glm::vec3& point) const{
-        /** @return false if the point is excluded from the model by this polygon */
 
-        if(glm::dot(m_plane.getNormal(), point - m_plane.getPoint()) >= 0) {
+    //////////////////////////// getting the world positions of the vertices ////////////////////////////////////
 
-            return false;
-        } else {
+    glm::vec3 HitboxPolygon::getWorldVertex(int id) const{
 
-            return true;
+        return glm::rotate(getWorldRot(), m_vertices.at(id)) * getWorldScale() + getWorldPosition();
+    }
+
+
+    std::vector<glm::vec3> HitboxPolygon::getWorldVertices() const {
+        /** @return all vertices transformed into world space */
+
+        std::vector<glm::vec3> world_vertices;
+
+        for(int i = 0; i < m_vertices.size(); i++) {
+
+            world_vertices.push_back(getWorldVertex(i));
         }
 
+        return world_vertices;
+    }
+
+
+    //////////////////////////// basic collision detection functions ////////////////////////////
+
+
+    bool HitboxPolygon::insideModel(const glm::vec3& point) const {
+        /** @return false if the point is excluded from the model by this polygon */
+
+        return (distancePointPlane(point, m_plane) <= 0);
     }
 
 
@@ -56,14 +100,18 @@ namespace undicht {
 
         if(intersect) {
             // plane and line intersect
-            dir = insideModel(l.getPoint() + l.getDir() * (dir_factor + 1));
+            dir = insideModel(l.getWorldPoint() + l.getWorldDir() * (dir_factor + 1));
 
             return true;
         } else {
             // plane and line are parallel
             dir = -1;
 
-            return insideModel(l.getPoint());
+            std::cout << "Polygon: line worldpoint: " << l.getWorldPoint() << "\n";
+            std::cout << "Polygon: plane normal / point: " << m_plane.getWorldNormal() << "  /  " << getWorldPosition() << "\n";
+            std::cout << "Polygon: inside Model: " << insideModel(l.getWorldPoint()) << "\n";
+
+            return insideModel(l.getWorldPoint());
         }
 
     }

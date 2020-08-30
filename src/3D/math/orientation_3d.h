@@ -18,7 +18,7 @@ namespace undicht {
 
             glm::vec3 m_position;
             glm::quat m_rotation;
-            glm::vec3 m_scale;
+            glm::vec3 m_scale = glm::vec3(1.0f);
 
             // whether the matrices representing the transformations need to be updated
             bool m_update_pos = true;

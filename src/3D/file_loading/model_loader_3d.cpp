@@ -30,5 +30,44 @@ namespace undicht {
 
     }
 
+    void ModelLoader3D::loadHitbox(PolygonHitbox& loadTo) {
+
+        std::vector<std::vector<float>> vertices;
+        std::vector<core::BufferLayout> layouts;
+
+        loadVertexData(vertices, layouts);
+
+        if(vertices.size() != layouts.size()) {
+            // something is not right in the loadVertexData function of the implementing class
+            return;
+        }
+
+        for(int i = 0; i < vertices.size(); i++) {
+            // adding a new simple polygon hitbox
+            float vertex_size = layouts.at(i).getTotalSize() / sizeof(float); // number of floats per vertex
+            float polygon_size = vertex_size * 3;
+            loadTo.addHitbox();
+
+            for(int polygon = 0; polygon < vertices.at(i).size() / polygon_size; polygon++) {
+                // going through each polygon of the mesh
+
+                std::vector<glm::vec3> positions;
+
+                for(int vertex = 0; vertex < 3; vertex++) {
+                    // going through each vertex of the polygon
+                    int first_float_id = polygon * polygon_size + vertex * vertex_size;
+
+                    positions.push_back(glm::vec3(vertices.at(i).at(first_float_id + 0), vertices.at(i).at(first_float_id + 1), vertices.at(i).at(first_float_id + 2)));
+                }
+
+                loadTo.m_hitboxes.back().addPolygon(HitboxPolygon(positions));
+
+            }
+
+        }
+
+    }
+
+
 
 } // undicht

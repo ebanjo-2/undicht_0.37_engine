@@ -6,6 +6,8 @@
 #include <3D/physics/hitboxes/hitbox.h>
 #include <3D/physics/hitboxes/cuboid_hitbox.h>
 #include <3D/physics/hitboxes/simple_polygon_hitbox.h>
+#include <3D/physics/hitboxes/sphere_hitbox.h>
+#include <3D/physics/hitboxes/polygon_hitbox.h>
 
 
 namespace undicht {

@@ -7,6 +7,7 @@ namespace undicht {
     int UND_CUBOID_HITBOX = 1;
     int UND_SIMPLE_POLYGON_HITBOX = 2;
     int UND_SPHERE_HITBOX = 3;
+    int UND_POLYGON_HITBOX = 4;
 
     Hitbox::Hitbox() {
         //ctor

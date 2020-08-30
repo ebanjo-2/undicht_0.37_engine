@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <3D/entities/model_3d.h>
+#include <3D/physics/hitboxes/polygon_hitbox.h>
 #include <graphics/model_loader.h>
+
 
 
 namespace undicht {
@@ -22,6 +24,8 @@ namespace undicht {
             /** if the loaded model contains submodels,
             * they should be placed into the models m_child_models vector */
             virtual void loadModel(Model3D& loadTo);
+
+            virtual void loadHitbox(PolygonHitbox& loadTo);
 
 
             ModelLoader3D();

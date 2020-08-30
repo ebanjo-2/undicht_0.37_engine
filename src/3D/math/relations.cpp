@@ -1,4 +1,5 @@
 #include "relations.h"
+#include <iostream>
 
 namespace undicht {
 
@@ -9,15 +10,14 @@ namespace undicht {
     bool pointOnPlane(const glm::vec3& point, const Plane& plane) {
         /** @return whether the point is on the plane or not */
 
-        return (glm::dot(point - plane.getPoint(), plane.getNormal()) == 0);
+        return (glm::dot(point - plane.getWorldPoint(), plane.getWorldNormal()) == 0);
     }
 
 
     float distancePointPlane(const glm::vec3& point, const Plane& plane) {
         /** @return the distance between the point and the plane */
 
-
-        return glm::dot(plane.getNormal(), (point - plane.getPoint()));
+        return glm::dot(plane.getWorldNormal(), (point - plane.getWorldPoint()));
     }
 
 
@@ -36,7 +36,7 @@ namespace undicht {
             return false;
         }
 
-        point = line.getPoint() + line.getDir() * x;
+        point = line.getWorldPoint() + line.getWorldDir() * x;
 
         return true;
     }
@@ -47,7 +47,7 @@ namespace undicht {
         @param dir_factor: the factor with which the direction vector of the line has to be multiplied
         * to get from the lines base point to the intersection whith the polygons plane */
 
-        if(glm::dot(line.getDir(), plane.getNormal()) == 0) {
+        if(!intersecPlaneLine(plane, line)) {
             // parallel, no or infinite shared points
             return false;
         }
@@ -58,7 +58,7 @@ namespace undicht {
         // (n * ld) * x = (pp * n - n * ls)
         // x = (pp * n - n * ls) / (n * ld); right?
 
-        dir_factor = (glm::dot(plane.getPoint(), plane.getNormal()) - glm::dot(plane.getNormal(), line.getPoint())) / glm::dot(plane.getNormal(), line.getDir());
+        dir_factor = (glm::dot(plane.getWorldPoint(), plane.getWorldNormal()) - glm::dot(plane.getWorldNormal(), line.getWorldPoint())) / glm::dot(plane.getWorldNormal(), line.getWorldDir());
 
         return true;
     }
@@ -66,14 +66,8 @@ namespace undicht {
     bool intersecPlaneLine(const Plane& plane, const Line& line) {
         /** @return whether the line and the plane intersect at a single point */
 
-        if(glm::dot(line.getDir(), plane.getNormal()) == 0) {
-            // parallel, no or infinite shared points
-            return false;
-        } else {
-
-            return true;
-        }
-
+        // 0 if there is a 90 degree angle between them -> the line is parallel to the plane
+        return glm::dot(line.getWorldDir(), plane.getWorldNormal());
     }
 
 

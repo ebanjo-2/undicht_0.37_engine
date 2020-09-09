@@ -6,25 +6,9 @@ namespace undicht {
         //ctor
     }
 
-    PolygonHitbox::PolygonHitbox(const PolygonHitbox& p) {
-        *this = p;
-    }
-
     PolygonHitbox::~PolygonHitbox() {
         //dtor
     }
-
-    void PolygonHitbox::operator= (const PolygonHitbox& p) {
-
-        m_hitboxes = p.m_hitboxes;
-
-        for(SimplePolygonHitbox& h : m_hitboxes) {
-
-            h.setTransfRelTo(this);
-        }
-
-    }
-
 
     int PolygonHitbox::getType() {
 

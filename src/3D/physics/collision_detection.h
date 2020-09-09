@@ -24,21 +24,41 @@ namespace undicht {
             static bool overlappingRanges(float range_1_start, float range_1_end, float range_2_start, float range_2_end);
 
         public:
+            // cuboid hitbox
 
             static bool overlappingVolume(const CuboidHitbox& h1, const CuboidHitbox& h2);
+
+        public:
+            // sphere hitbox
+
+            static bool overlappingVolume(const SphereHitbox& h1, const SphereHitbox& h2);
+
+        public:
+            // polygon hitbox
+
+            static bool overlappingVolume(const PolygonHitbox& h1, const PolygonHitbox& h2);
+
+        public:
+            // polygon hitbox X simple polygon hitbox
+
+            static bool overlappingVolume(const SimplePolygonHitbox& h1, const PolygonHitbox& h2);
+            static bool overlappingVolume(const PolygonHitbox& h1, const SimplePolygonHitbox& h2);
+
+        public:
+            // simple polygon hitbox
+
+            static bool overlappingVolume(const SimplePolygonHitbox& h1, const SimplePolygonHitbox& h2);
+
+        public:
+            // simple polygon hitbox X hitbox polygon
 
             /** tests if any of the polygons edges are inside the hitboxes volume */
             static bool overlappingVolume(const SimplePolygonHitbox& h1, const HitboxPolygon& polygon);
             static bool overlappingVolume(const HitboxPolygon& polygon, const SimplePolygonHitbox& h1);
 
-            static bool overlappingVolume(const SimplePolygonHitbox& h1, const SimplePolygonHitbox& h2);
 
-            static bool overlappingVolume(const SphereHitbox& h1, const SphereHitbox& h2);
 
-            static bool overlappingVolume(const SimplePolygonHitbox& h1, const PolygonHitbox& h2);
-            static bool overlappingVolume(const PolygonHitbox& h1, const SimplePolygonHitbox& h2);
 
-            static bool overlappingVolume(const PolygonHitbox& h1, const PolygonHitbox& h2);
 
     };
 

@@ -8,25 +8,10 @@ namespace undicht {
         //ctor
     }
 
-    SimplePolygonHitbox::SimplePolygonHitbox(const SimplePolygonHitbox& h) {
-
-        *this = h;
-    }
-
     SimplePolygonHitbox::~SimplePolygonHitbox() {
         //dtor
     }
 
-    void SimplePolygonHitbox::operator= (const SimplePolygonHitbox& h) {
-
-        m_polygons = h.m_polygons;
-
-        for(HitboxPolygon& p : m_polygons) {
-
-            p.setTransfRelTo(this);
-        }
-
-    }
 
 
     int SimplePolygonHitbox::getType() {
@@ -54,8 +39,6 @@ namespace undicht {
     bool SimplePolygonHitbox::collision(const glm::vec3& line_start, const glm::vec3& line_end) const{
         /** testing whether any part of the line is in the hitbox or not */
 
-        std::cout << "collision test simple hitbox x line" << "\n";
-
         float line_dir_min = 0;
         float line_dir_max = 1;
 
@@ -82,11 +65,7 @@ namespace undicht {
 
                 line_dir_min = std::max(line_dir_min, dir_factor);
 
-            }  else {
-                std::cout << "Simple: line worldpoint: " << l.getWorldPoint() << "\n";
-                std::cout << "Simple: plane normal / point: " << p.m_plane.getWorldNormal() << "  /  " << getWorldPosition() << "\n";
-                std::cout << "Simple: inside Model: " << p.insideModel(l.getWorldPoint()) << "\n";
-            }// else if(cutof_direction == -1): do nothing
+            } // else if(cutof_direction == -1): do nothing
 
             // testing whether there is any part of the line left not excluded
             if(line_dir_max < line_dir_min) {
@@ -96,8 +75,8 @@ namespace undicht {
 
         }
 
-        std::cout << "collision: " << line_start << "    /    " << line_end << "\n";
-        std::cout << "min: " << line_dir_min << " max: " << line_dir_max << "\n";
+        /*std::cout << "collision: " << line_start << "    /    " << line_end << "\n";
+        std::cout << "min: " << line_dir_min << " max: " << line_dir_max << "\n";*/
 
         // there is a part of the line not excluded from the hitbox by the polygons
         return true;
@@ -109,7 +88,11 @@ namespace undicht {
     int SimplePolygonHitbox::addPolygon(const HitboxPolygon& polygon) {
 
         m_polygons.push_back(polygon);
-        m_polygons.back().setTransfRelTo(this);
+
+        for(HitboxPolygon& p : m_polygons) {
+
+            p.setTransfRelTo(this);
+        }
 
         return m_polygons.size() - 1;
     }

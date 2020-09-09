@@ -12,13 +12,25 @@ namespace undicht {
         /** a class that has functions to rotate and translate an Object */
 
         protected:
+            // members to correctly copy the relative orientation reference
+
+            // this pointer will point to the object this orientations data was copied to
+            // so that the orientations relative to the object copied to can access that object when being copied
+            Orientation3D* m_last_copy = 0;
+            int m_childs_left_to_copy = 0; // the number of childs left to be copied after this orientation was copied
+
+            // number of orientations who use this one as their relative orientation
+            int m_total_childs = 0;
+
+        public:
             // members to store the orientation
+
 
             Orientation3D* m_relative_orientation = 0;
 
             glm::vec3 m_position;
             glm::quat m_rotation;
-            glm::vec3 m_scale = glm::vec3(1.0f);
+            glm::vec3 m_scale;
 
             // whether the matrices representing the transformations need to be updated
             bool m_update_pos = true;
@@ -97,7 +109,10 @@ namespace undicht {
 
         public:
 
+            void operator= (const Orientation3D& o);
+
             Orientation3D();
+            Orientation3D(const Orientation3D& o);
             virtual ~Orientation3D();
 
     };

@@ -27,10 +27,7 @@ namespace undicht {
 
             SimplePolygonHitbox& getHitbox(int id);
 
-            void operator= (const PolygonHitbox& p);
-
             PolygonHitbox();
-            PolygonHitbox(const PolygonHitbox& p);
             virtual ~PolygonHitbox();
 
     };

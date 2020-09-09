@@ -40,10 +40,7 @@ namespace undicht {
 
         public:
 
-            void operator= (const SimplePolygonHitbox& h);
-
             SimplePolygonHitbox();
-            SimplePolygonHitbox(const SimplePolygonHitbox& h);
             virtual ~SimplePolygonHitbox();
 
     };

@@ -22,23 +22,9 @@ namespace undicht {
 
     }
 
-    HitboxPolygon::HitboxPolygon(const HitboxPolygon& p) {
-
-        *this = p;
-    }
-
     HitboxPolygon::~HitboxPolygon() {
         //dtor
     }
-
-    void HitboxPolygon::operator= (const HitboxPolygon& p) {
-
-        m_vertices = p.m_vertices;
-        m_plane = p.m_plane;
-
-        m_plane.setTransfRelTo(this);
-    }
-
 
 
     void HitboxPolygon::setVertices(const std::vector<glm::vec3>& vertices) {
@@ -60,7 +46,7 @@ namespace undicht {
 
     //////////////////////////// getting the world positions of the vertices ////////////////////////////////////
 
-    glm::vec3 HitboxPolygon::getWorldVertex(int id) const{
+    glm::vec3 HitboxPolygon::getWorldVertex(int id) const {
 
         return glm::rotate(getWorldRot(), m_vertices.at(id)) * getWorldScale() + getWorldPosition();
     }
@@ -106,10 +92,6 @@ namespace undicht {
         } else {
             // plane and line are parallel
             dir = -1;
-
-            std::cout << "Polygon: line worldpoint: " << l.getWorldPoint() << "\n";
-            std::cout << "Polygon: plane normal / point: " << m_plane.getWorldNormal() << "  /  " << getWorldPosition() << "\n";
-            std::cout << "Polygon: inside Model: " << insideModel(l.getWorldPoint()) << "\n";
 
             return insideModel(l.getWorldPoint());
         }

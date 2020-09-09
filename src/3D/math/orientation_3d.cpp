@@ -15,12 +15,61 @@ namespace undicht {
         m_rotation = glm::angleAxis(0.0f, glm::vec3(0,0,-1));
         m_position = glm::vec3(0,0,0);
         m_scale = glm::vec3(1,1,1);
+        m_last_copy = this;
     }
 
-
+    Orientation3D::Orientation3D(const Orientation3D& o) {
+        // ctor
+        *this = o;
+    }
 
     Orientation3D::~Orientation3D() {
         //dtor
+
+        if(m_relative_orientation) {
+
+            m_relative_orientation->m_total_childs -= 1;
+        }
+    }
+
+
+    void Orientation3D::operator= (const Orientation3D& o) {
+
+            m_position = o.m_position;
+            m_rotation = o.m_rotation;
+            m_scale = o.m_scale;
+
+            m_update_pos = o.m_update_pos;
+            m_update_rot = o.m_update_rot;
+            m_update_transf = o.m_update_transf;
+
+            m_transl_mat = o.m_transl_mat;
+            m_rot_mat = o.m_rot_mat;
+            m_transf_mat = o.m_transf_mat;
+
+            // making sure the parent orientation is the one o's parent orientation got copied to
+            // if o's parent orientation didnt get copied, o's parent orientation is this orientations parent
+            if(o.m_relative_orientation) {
+
+                if(o.m_relative_orientation->m_childs_left_to_copy > 0) {
+
+                    setTransfRelTo(o.m_relative_orientation->m_last_copy);
+                    ((Orientation3D*)&o)->m_relative_orientation->m_childs_left_to_copy -= 1;
+                } else {
+
+                    setTransfRelTo(o.m_relative_orientation);
+                }
+
+            } else {
+
+                setTransfRelTo(0);
+            }
+
+            // so that orientations relative to this one can find the object
+            // not the nicest way to do things, lets hope it works
+            ((Orientation3D*)&o)->m_last_copy = this;
+            ((Orientation3D*)&o)->m_childs_left_to_copy = o.m_total_childs;
+            m_last_copy = this;
     }
 
 
@@ -209,7 +258,7 @@ namespace undicht {
             return getTransfMat();
         } else {
 
-            return m_relative_orientation->getTransfMat() * getTransfMat();
+            return m_relative_orientation->getWorldTransfMat() * getTransfMat();
         }
 
     }
@@ -217,6 +266,16 @@ namespace undicht {
     void Orientation3D::setTransfRelTo(Orientation3D* rel_transf) {
         /** sets this orientations transformation (position + rotation) to be relative to the orientation passed
         * @param : if 0 is passed, the transformation will be relative to the world */
+
+        if(m_relative_orientation) {
+
+            m_relative_orientation->m_total_childs -= 1;
+        }
+
+        if(rel_transf) {
+
+            rel_transf->m_total_childs += 1;
+        }
 
         m_relative_orientation = rel_transf;
 

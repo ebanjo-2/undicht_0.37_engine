@@ -49,11 +49,7 @@ namespace undicht {
             * -1, if the line and polygon are parallel */
             virtual bool insideModel(const Line& l, float& dir_factor, char& dir) const;
 
-
-            void operator= (const HitboxPolygon& p);
-
             HitboxPolygon();
-            HitboxPolygon(const HitboxPolygon& p);
             HitboxPolygon(const std::vector<glm::vec3>& vertices);
             virtual ~HitboxPolygon();
 

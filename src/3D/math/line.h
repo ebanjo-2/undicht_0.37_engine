@@ -2,12 +2,10 @@
 #define LINE_H
 
 #include <glm/glm/glm.hpp>
-#include "orientation_3d.h"
-
 
 namespace undicht {
 
-    class Line : public Orientation3D {
+    class Line {
             /** a class representing an infinite straight line */
 
         protected:
@@ -22,6 +20,9 @@ namespace undicht {
             /** defined by a point on the line + the positive direction of the line */
             void def(const glm::vec3& point, const glm::vec3& dir);
 
+            /** defined by 2 points on the line */
+            void def2P(const glm::vec3& point1, const glm::vec3& point2);
+
         public:
             // getting the defining attributes of the line
 
@@ -31,12 +32,7 @@ namespace undicht {
             /** @return the positive direction of the line */
             const glm::vec3& getDir() const;
 
-        public:
-            // getting the defining attributes of the line with the Orientation3D applied
 
-            glm::vec3 getWorldPoint() const;
-
-            glm::vec3 getWorldDir() const;
 
         public:
             // testing whether the line is properly defined

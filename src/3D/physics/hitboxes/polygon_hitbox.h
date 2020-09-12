@@ -2,7 +2,7 @@
 #define POLYGON_HITBOX_H
 
 #include <vector>
-#include <3D/physics/hitboxes/simple_polygon_hitbox.h>
+#include <3D/physics/hitboxes/primitives/hitbox_polygon.h>
 #include <3D/physics/hitboxes/hitbox.h>
 
 namespace undicht {
@@ -13,19 +13,28 @@ namespace undicht {
 
         public:
 
-            /** please only add the to the hitbox via the functions provided below */
-            std::vector<SimplePolygonHitbox> m_hitboxes;
+            std::vector<HitboxPolygon> m_polygons;
+
+        public:
+            // managing the polygons of the hitbox
+
+            void setPolygons(const std::vector<HitboxPolygon>& polygons);
+
+            void addPolygon(const HitboxPolygon& polygon);
+
+            void setPolygon(const HitboxPolygon& polygon, int id);
+
+            const HitboxPolygon& getPolygon(int id) const;
+
+        public:
+            // collision detection functions
+
+            /** @return true if the hitboxes have overlapping volumes */
+            virtual bool collision(const PolygonHitbox& hitbox) const;
 
         public:
 
-            int getType();
-
-            int getHitboxCount();
-
-            SimplePolygonHitbox& addHitbox();
-            int addHitbox(const SimplePolygonHitbox& h);
-
-            SimplePolygonHitbox& getHitbox(int id);
+            virtual int getType() const;
 
             PolygonHitbox();
             virtual ~PolygonHitbox();

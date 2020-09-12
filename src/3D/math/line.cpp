@@ -26,6 +26,13 @@ namespace undicht {
         m_direction = dir;
     }
 
+    void Line::def2P(const glm::vec3& point1, const glm::vec3& point2) {
+        /** defined by 2 points on the line */
+
+        m_point = point1;
+        m_direction = point2 - point1;
+
+    }
 
     //////////////////////////// getting the defining attributes of the line ////////////////////////////
 
@@ -39,18 +46,6 @@ namespace undicht {
         /** @return the positive direction of the line */
 
         return m_direction;
-    }
-
-    ///////////////////// getting the defining attributes of the line with the Orientation3D applied ///////////////////////
-
-    glm::vec3 Line::getWorldPoint() const {
-
-        return getWorldPosition() + getPoint();
-    }
-
-    glm::vec3 Line::getWorldDir() const {
-
-        return glm::rotate(getWorldRot(), getDir());
     }
 
     ///////////////////////////////////// testing whether the line is properly defined /////////////////////////////////////

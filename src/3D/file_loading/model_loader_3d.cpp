@@ -46,7 +46,6 @@ namespace undicht {
             // adding a new simple polygon hitbox
             float vertex_size = layouts.at(i).getTotalSize() / sizeof(float); // number of floats per vertex
             float polygon_size = vertex_size * 3;
-            SimplePolygonHitbox& hitb = loadTo.addHitbox();
 
             for(int polygon = 0; polygon < vertices.at(i).size() / polygon_size; polygon++) {
                 // going through each polygon of the mesh
@@ -60,7 +59,7 @@ namespace undicht {
                     positions.push_back(glm::vec3(vertices.at(i).at(first_float_id + 0), vertices.at(i).at(first_float_id + 1), vertices.at(i).at(first_float_id + 2)));
                 }
 
-                hitb.addPolygon(HitboxPolygon(positions));
+                loadTo.addPolygon(HitboxPolygon(positions));
 
             }
 

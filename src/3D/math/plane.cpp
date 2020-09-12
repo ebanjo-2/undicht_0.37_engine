@@ -54,20 +54,6 @@ namespace undicht {
         return m_point;
     }
 
-    ////////////////////////// getting the defining attributes of the plane with the Orientation3D applied //////////////////////////
-
-    glm::vec3 Plane::getWorldNormal() const {
-        /** @return the normal of the plane (in world space)*/
-
-        return glm::rotate(getWorldRot(), getNormal());
-    }
-
-    glm::vec3 Plane::getWorldPoint() const {
-        /** @return a point on the plane (in world space)*/
-
-        return getWorldPosition() + getPoint();
-    }
-
 
     ///////////////////////////////////// testing whether the plane is properly defined /////////////////////////////////////
 

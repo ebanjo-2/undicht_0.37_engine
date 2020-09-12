@@ -2,11 +2,10 @@
 #define PLANE_H
 
 #include <glm/glm/glm.hpp>
-#include "orientation_3d.h"
 
 namespace undicht {
 
-    class Plane : public Orientation3D {
+    class Plane {
         /** a class representing an infinite plane in 3D space */
         protected:
             // members defining the plane
@@ -34,15 +33,6 @@ namespace undicht {
 
             /** @return a point on the plane */
             const glm::vec3& getPoint() const;
-
-        public:
-            // getting the defining attributes of the plane with the Orientation3D applied
-
-            /** @return the normal of the plane (in world space)*/
-            glm::vec3 getWorldNormal() const;
-
-            /** @return a point on the plane (in world space)*/
-            glm::vec3 getWorldPoint() const;
 
         public:
             // testing whether the plane is properly defined

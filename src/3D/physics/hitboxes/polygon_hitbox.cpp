@@ -10,36 +10,60 @@ namespace undicht {
         //dtor
     }
 
-    int PolygonHitbox::getType() {
+    int PolygonHitbox::getType() const{
 
         return UND_POLYGON_HITBOX;
     }
 
-    int PolygonHitbox::getHitboxCount() {
 
-        return m_hitboxes.size();
+    //////////////////////////////////// managing the polygons of the hitbox ///////////////////////////////////
+
+    void PolygonHitbox::setPolygons(const std::vector<HitboxPolygon>& polygons) {
+
+        m_polygons = polygons;
     }
 
-    SimplePolygonHitbox& PolygonHitbox::addHitbox() {
+    void PolygonHitbox::addPolygon(const HitboxPolygon& polygon) {
 
-        m_hitboxes.emplace_back(SimplePolygonHitbox());
-        m_hitboxes.back().setTransfRelTo(this);
-
-        return m_hitboxes.back();
+        m_polygons.push_back(polygon);
+        m_polygons.back().setTransfRelTo(this);
     }
 
-    int PolygonHitbox::addHitbox(const SimplePolygonHitbox& h) {
+    void PolygonHitbox::setPolygon(const HitboxPolygon& polygon, int id) {
 
-        m_hitboxes.push_back(h);
-        m_hitboxes.back().setTransfRelTo(this);
+        m_polygons.at(id) = polygon;
+        m_polygons.at(id).setTransfRelTo(this);
 
-        return m_hitboxes.size() - 1;
     }
 
+    const HitboxPolygon& PolygonHitbox::getPolygon(int id) const{
 
-    SimplePolygonHitbox& PolygonHitbox::getHitbox(int id) {
+        return m_polygons.at(id);
+    }
 
-        return m_hitboxes.at(id);
+    //////////////////////////////////// collision detection functions ////////////////////////////////////
+
+    bool PolygonHitbox::collision(const PolygonHitbox& hitbox) const{
+        /** @return true if the hitboxes have overlapping volumes */
+
+        // testing if the polygons of this hitbox intersect with any polygons of the other hitbox
+
+        for(const HitboxPolygon& this_polygon : m_polygons) {
+
+            for(const HitboxPolygon& hitb_polygon : hitbox.m_polygons) {
+
+                if(this_polygon.intersection(hitb_polygon)) {
+
+                    return true;
+                }
+
+            }
+        }
+
+        // there may be the case where the one hitbox is included entirely and no polygons intersect,
+        // but thats none of my business
+
+        return false;
     }
 
 } // undicht

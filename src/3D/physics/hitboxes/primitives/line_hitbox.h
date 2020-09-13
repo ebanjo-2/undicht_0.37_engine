@@ -23,7 +23,7 @@ namespace undicht {
             virtual bool intersection(const LineHitbox& line, glm::vec3& point) const;
 
             /** @param dir_factor_this: the factor with which to multiply this lines direction vector to get to the intersection
-            * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection */
+            * @param dir_factor_line: the factor with which to multiply the other lines direction vector to get to the intersection */
             virtual bool intersection(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const;
 
             /** @return whether there is an intersection between the lines

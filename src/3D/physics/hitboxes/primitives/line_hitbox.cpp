@@ -4,7 +4,11 @@
 #include <3D/math/math_tools.h>
 #include <iostream>
 
+#include <core/event_logger.h>
+
 namespace undicht {
+
+    using namespace core;
 
     LineHitbox::LineHitbox() {
         //ctor
@@ -14,7 +18,7 @@ namespace undicht {
         //dtor
     }
 
-    int LineHitbox::getType() const{
+    int LineHitbox::getType() const {
 
         return UND_LINE_HITBOX;
     }
@@ -32,9 +36,9 @@ namespace undicht {
         return glm::rotate(getWorldRot(), getDir());
     }
 
-                /////////////////////////////////////// basic collision detection functions ///////////////////////////////////////
+    /////////////////////////////////////// basic collision detection functions ///////////////////////////////////////
 
-    bool LineHitbox::intersection(const LineHitbox& line, glm::vec3& point) const{
+    bool LineHitbox::intersection(const LineHitbox& line, glm::vec3& point) const {
         /** @return whether there is an intersection between the lines */
 
         float f1, f2;
@@ -52,7 +56,7 @@ namespace undicht {
     }
 
 
-    bool LineHitbox::intersection(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const{
+    bool LineHitbox::intersection(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const {
         /** @param dir_factor_this: the factor with which to multiply this lines direction vector to get to the intersection
         * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection */
 
@@ -68,7 +72,7 @@ namespace undicht {
     }
 
 
-    bool LineHitbox::intersecOnPlane(const LineHitbox& line, glm::vec3& point) const{
+    bool LineHitbox::intersecOnPlane(const LineHitbox& line, glm::vec3& point) const {
         /** @return whether there is an intersection between the lines
         * the lines have to form a plane, otherwise this function wont produce anything usefull */
 
@@ -87,7 +91,7 @@ namespace undicht {
     }
 
 
-    bool LineHitbox::intersecOnPlane(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const{
+    bool LineHitbox::intersecOnPlane(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const {
         /** @param dir_factor_this: the factor with which to multiply this lines direction vector to get to the intersection
         * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection */
 
@@ -98,26 +102,56 @@ namespace undicht {
 
         if((d1.x / d2.x) ==  (d1.y / d2.y) == (d1.z / d2.z)) {
             // they are parallel, so they dont intersect (maybe they are identical, but they dont intersect)
+            std::cout << "line is parallel to this one" << "\n";
             return false;
         }
 
-        std::cout << line.getWorldPoint() << "\n";
+        glm::vec3 p1 = getWorldPoint();
+        glm::vec3 p2 = line.getWorldPoint();
 
-        // setting the equasitions of the lines equal results in this:
-        // p1 + f1 * d1.x = p2 + f2 * d2.x
-        // which leads us to here (we know that the lines are on a plane, so we can save the .z part):
-        // | d1.x * f1 - d2.x * f2 = p2.x - p1.x |
-        // | d1.y * f1 - d2.y * f2 = p2.y - p1.y |
-        // a little gauss later (done by ti voyage 200)
-        // (i gave up doing it by hand once i realised that it wasnt that simple to shorten and a lot of writing):
-        // f1 = d2x*(p1y-p2y)-d2y*(p1x-p2x)/(d1x*d2y-d1y*d2x)
-        // f2 = d1x*(p1y-p2y)-d1y*(p1x-p2x)/(d1x*d2y-d1y*d2x)
+        // we know that the lines are on the same plane and that they are not parallel, so they must intersect at sime point
+        // | p1.x + f1 * d1.x = p2.x + f2 * d2.x |
+        // | p1.y + f1 * d1.y = p2.y + f2 * d2.y |
+        // | p1.z + f1 * d1.z = p2.z + f2 * d2.z |
 
-        glm::vec3 p = getWorldPoint() - line.getWorldPoint();
-        float dividor = (d1.x * d2.y - d1.y * d2.x); // (d1x*d2y-d1y*d2x)
+        // there are 3 equasitions to calculate the 2 factors, so we only need two
+        // however, not every combination of equations may work
+        // solving this with an ti voyage 200 brings me to here
+        // f1 = (d2x * (p1y - p2y) - d2y * (p1x - p2x)) / (d1x * d2y - d1y * d2x)
+        // f2 = (d1x * (p1y - p2y) - d1y * (p1x - p2x)) / (d1x * d2y - d1y * d2x)
+        // you can see how this could go wrong: if (d1x * d2y - d1y * d2x) equals 0
 
-        dir_factor_this = d2.x * p.y - d2.y * p.x / dividor; // it just works (i hope)
-        dir_factor_line = d1.x * p.y - d1.y * p.x / dividor; // yeah, this doesnt really make sense to me
+        float dividor = d1.x * d2.y - d1.y * d2.x;
+
+        if(dividor != 0) {
+            // proceed with calculation
+            dir_factor_this = (d2.x * (p1.y - p2.y) - d2.y * (p1.x - p2.x)) / dividor;
+            dir_factor_line = (d1.x * (p1.y - p2.y) - d1.y * (p1.x - p2.x)) / dividor;
+        } else {
+            // try different set of equations (x and z)
+            dividor = d1.x * d2.z - d1.z * d2.x;
+
+            if(dividor != 0) {
+                // proceed with calculation
+                dir_factor_this = (d2.x * (p1.z - p2.z) - d2.z * (p1.x - p2.x)) / dividor;
+                dir_factor_line = (d1.x * (p1.z - p2.z) - d1.z * (p1.x - p2.x)) / dividor;
+            } else {
+                // try different set of equations (x and z)
+                dividor = d1.y * d2.z - d1.z * d2.y;
+
+                if(dividor != 0) {
+                    // proceed with calculation
+                    dir_factor_this = (d2.y * (p1.z - p2.z) - d2.z * (p1.y - p2.y)) / dividor;
+                    dir_factor_line = (d1.y * (p1.z - p2.z) - d1.z * (p1.y - p2.y)) / dividor;
+                } else {
+                    // this should never happen
+                    EventLogger::storeNote(Note(UND_ERROR, "LINE HITBOX: somethings wrong, i can feel it", UND_CODE_ORIGIN));
+                    return false;
+                }
+            }
+        }
+
+
 
         return true;
     }

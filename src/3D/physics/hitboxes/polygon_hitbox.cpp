@@ -1,4 +1,5 @@
 #include "polygon_hitbox.h"
+#include <iostream>
 
 namespace undicht {
 
@@ -53,7 +54,7 @@ namespace undicht {
             for(const HitboxPolygon& hitb_polygon : hitbox.m_polygons) {
 
                 if(this_polygon.intersection(hitb_polygon)) {
-
+                    std::cout << "here" << "\n";
                     return true;
                 }
 

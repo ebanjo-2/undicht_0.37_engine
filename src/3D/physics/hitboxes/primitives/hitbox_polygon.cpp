@@ -135,9 +135,10 @@ namespace undicht {
         for(const LineHitbox& edge : m_edges) {
 
             if(edge.intersecOnPlane(line, f1, f2)) {
-
-                if((f1 > 0) && (f1 < 1)) {
+                std::cout << "intersection with edge line at " << f1 << " " << f2 << "\n";
+                if((f1 >= 0) && (f1 <= 1)) {
                     // intersection with edge
+
 
                     if(!intersec) {
                         // first intersection with an edge has been found
@@ -147,6 +148,8 @@ namespace undicht {
 
                     } else {
                         // second intersection with an edge has been found
+
+                        std::cout << "second intersection with edge" << "\n";
 
                         dir_factor2 = f2;
 
@@ -171,26 +174,31 @@ namespace undicht {
 
         glm::vec3 shared_point, intersec_dir;
         if(!intersecPlanePlane(m_plane.getWorldPoint(), m_plane.getWorldNormal(), polygon.m_plane.getWorldPoint(), polygon.m_plane.getWorldNormal(), shared_point, intersec_dir)) {
-
+            std::cout << "they dont intersect" << "\n";
             return false;
         }
 
         LineHitbox shared_line; // the line that is on both planes
         shared_line.def(shared_point, intersec_dir);
 
+        std::cout << "shared line: " << shared_point << "     /     " << intersec_dir << "\n";
+
         float f1, f2, f3, f4;
 
         if(!edgeIntersection(shared_line, f1, f2)) {
             // this polygon does not "collide" with the shared line, so it cant "collide" with the other polygon
-
+            std::cout << "polygon does not collide with shared line" << "\n";
             return false;
         }
 
         if(!polygon.edgeIntersection(shared_line, f3, f4)) {
             // the polygon does not "collide" with the shared line, so it cant "collide" with the this polygon
-
+            std::cout << "other polygon does not collide with shared line" << "\n";
             return false;
         }
+
+        std::cout << "got here, almost there" << "\n";
+        std::cout << f1 << " " << f2 << " " << f3 << " " <<  f4 << "\n";
 
         if(MathTools::overlappingRanges(f1, f2, f3, f4)) {
             // the polygons intersect with the shared line in the same range, so they are intersecting

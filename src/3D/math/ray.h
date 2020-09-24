@@ -1,11 +1,11 @@
-#ifndef LINE_H
-#define LINE_H
+#ifndef RAY_H
+#define RAY_H
 
 #include <glm/glm/glm.hpp>
 
 namespace undicht {
 
-    class Line {
+    class Ray {
             /** a class representing an infinite straight line */
 
         protected:
@@ -15,7 +15,7 @@ namespace undicht {
             glm::vec3 m_direction = glm::vec3(0,0,0);
 
         public:
-            // defining the line
+            // defining the Ray
 
             /** defined by a point on the line + the positive direction of the line */
             void def(const glm::vec3& point, const glm::vec3& dir);
@@ -35,18 +35,18 @@ namespace undicht {
 
 
         public:
-            // testing whether the line is properly defined
+            // testing whether the ray is properly defined
 
             operator bool();
 
         public:
 
-            Line();
-            Line(const glm::vec3& point, const glm::vec3& dir);
-            virtual ~Line();
+            Ray();
+            Ray(const glm::vec3& point, const glm::vec3& dir);
+            virtual ~Ray();
 
     };
 
 } // undicht
 
-#endif // LINE_H
+#endif // RAY_H

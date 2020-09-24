@@ -37,12 +37,12 @@ namespace undicht {
 
     bool PlaneHitbox::intersection(const LineHitbox& line, glm::vec3& point_of_intersection) {
 
-        return intersecPlaneLine(m_norm_dot_point, getWorldPoint(), getWorldNormal(), line.getWorldPoint(), line.getWorldDir(), point_of_intersection);
+        return intersecPlaneRay(m_norm_dot_point, getWorldPoint(), getWorldNormal(), line.getWorldPoint(), line.getWorldDir(), point_of_intersection);
     }
 
     bool PlaneHitbox::intersection(const LineHitbox& line, float& dir_factor) {
 
-        return intersecPlaneLine(m_norm_dot_point, getWorldPoint(), getWorldNormal(), line.getWorldPoint(), line.getWorldDir(), dir_factor);
+        return intersecPlaneRay(m_norm_dot_point, getWorldPoint(), getWorldNormal(), line.getWorldPoint(), line.getWorldDir(), dir_factor);
     }
 
 } // undicht

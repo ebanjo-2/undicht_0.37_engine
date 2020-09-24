@@ -85,6 +85,7 @@ namespace undicht {
 
         return world_vertices;
     }
+
     //////////////////////////// getting the edges of the polygon ////////////////////////////
 
     const LineHitbox& HitboxPolygon::getEdge(int id) const {

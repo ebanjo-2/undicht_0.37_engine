@@ -14,6 +14,11 @@ namespace undicht {
         //ctor
     }
 
+    LineHitbox::LineHitbox(const glm::vec3& point_1, const glm::vec3& point_2) {
+
+        def2P(point_1, point_2);
+    }
+
     LineHitbox::~LineHitbox() {
         //dtor
     }
@@ -50,6 +55,12 @@ namespace undicht {
             return false;
         }
 
+        if((f1 < 0) || (f1 > 1) || (f2 < 0) || (f2 > 1)) {
+            // the point of intersection is outside of the lines range
+
+            return false;
+        }
+
         point = getWorldPoint() + f1 * getWorldDir();
 
         return true;
@@ -58,7 +69,9 @@ namespace undicht {
 
     bool LineHitbox::intersection(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const {
         /** @param dir_factor_this: the factor with which to multiply this lines direction vector to get to the intersection
-        * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection */
+        * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection
+        * @return will also return true if the rays on which the lines are collide at some point outside the lines range
+        * in which case at least one of the dir_factors is outside the range of [0,1] */
 
         Plane p;
         p.defW2D(getWorldPoint(), getWorldDir(), line.getWorldDir());
@@ -85,6 +98,12 @@ namespace undicht {
             return false;
         }
 
+        if((f1 < 0) || (f1 > 1) || (f2 < 0) || (f2 > 1)) {
+            // the point of intersection is outside of the lines range
+
+            return false;
+        }
+
         point = getWorldPoint() + f1 * getWorldDir();
 
         return true;
@@ -93,7 +112,9 @@ namespace undicht {
 
     bool LineHitbox::intersecOnPlane(const LineHitbox& line, float& dir_factor_this, float& dir_factor_line) const {
         /** @param dir_factor_this: the factor with which to multiply this lines direction vector to get to the intersection
-        * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection */
+        * @param dir_factor_this: the factor with which to multiply the other lines direction vector to get to the intersection
+        * @return will also return true if the rays on which the lines are collide at some point outside the lines range
+        * in which case at least one of the dir_factors is outside the range of [0,1] */
 
         // they have to be on the same plane for this to work
 
@@ -150,7 +171,6 @@ namespace undicht {
                 }
             }
         }
-
 
 
         return true;

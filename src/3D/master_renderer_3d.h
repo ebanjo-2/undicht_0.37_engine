@@ -12,6 +12,7 @@
 #include <3D/entities/camera_3d.h>
 #include <3D/entities/model_3d.h>
 #include <3D/renderers/forward_renderer.h>
+#include <3D/renderers/sketch_renderer.h>
 
 
 namespace undicht {
@@ -22,6 +23,7 @@ namespace undicht {
         private:
 
             friend ForwardRenderer;
+            friend SketchRenderer;
 
             static window::GraphicsContext* s_context;
             static window::Window* s_window;
@@ -35,6 +37,7 @@ namespace undicht {
             // Renderers
 
             static ForwardRenderer* s_forward_renderer;
+            static SketchRenderer* s_sketch_renderer;
 
         public:
 

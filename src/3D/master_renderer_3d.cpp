@@ -17,6 +17,8 @@ namespace undicht {
 
     // Renderers
     ForwardRenderer* MasterRenderer3D::s_forward_renderer = 0;
+    SketchRenderer* MasterRenderer3D::s_sketch_renderer = 0;
+
 
 
 
@@ -53,14 +55,17 @@ namespace undicht {
 
         // creating the renderer objects
         s_forward_renderer = new ForwardRenderer;
+        s_sketch_renderer = new SketchRenderer;
 
 
         s_forward_renderer->loadSettings(config, "SimpleForward", file_path);
+        s_sketch_renderer->loadSettings(config, "Sketch", file_path);
     }
 
     void MasterRenderer3D::terminate() {
 
         delete s_forward_renderer;
+        delete s_sketch_renderer;
 
     }
 
@@ -118,11 +123,13 @@ namespace undicht {
 
         // clearing all the framebuffers
         s_forward_renderer->clearFramebuffer(); // default and visible framebuffer
+        // s_sketch_renderer->clearFramebuffer();
 
         // loading the camera to all renderers
         if(s_scene_camera) {
 
             s_forward_renderer->loadCamera(*s_scene_camera);
+            s_sketch_renderer->loadCamera(*s_scene_camera);
 
         }
 

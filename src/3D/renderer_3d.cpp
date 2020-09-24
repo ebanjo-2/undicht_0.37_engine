@@ -116,8 +116,9 @@ namespace undicht {
     void Renderer3D::loadModelOrientation(Orientation3D& orientation) {
 
         m_model_uniform.setData(glm::value_ptr(orientation.getWorldTransfMat()), UND_MAT4F);
-
         m_shader.loadUniform(m_model_uniform);
+
+        loadModelScale(orientation.getScale());
     }
 
     void Renderer3D::loadModelScale(const glm::vec3& scale) {

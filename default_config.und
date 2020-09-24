@@ -25,6 +25,12 @@
 				<enable_depth_test>true</enable_depth_test>
 				<cull_back_face>false</cull_back_face>
 			</SimpleForward>
+			<Sketch>
+				<info> a very simple 3D renderer to draw simple geometry quickly used mainly for development and debugging </info>
+				<init_from>src/3D/shader/sketch.glsl</init_from>
+				<enable_depth_test>true</enable_depth_test>
+				<cull_back_face>false</cull_back_face>
+			</Sketch>
 		</_3D>
 	</Rendering>
 </engine>

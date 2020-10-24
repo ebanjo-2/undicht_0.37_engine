@@ -4,6 +4,7 @@
 #include <core/types.h>
 #include <3D/master_renderer_3d.h>
 #include <glm/glm/gtc/type_ptr.hpp>
+#include <3D/math/math_tools.h>
 
 
 
@@ -38,19 +39,23 @@ namespace undicht {
 
     ////////////////////////////////////// changing the way things are drawn ////////////////////////////////////
 
-    void SketchRenderer::setDrawColor(const glm::vec3& color) {
+    SketchRenderer* SketchRenderer::setDrawColor(const glm::vec3& color) {
 
         m_color_uniform.setData(glm::value_ptr(color), UND_VEC3F);
         m_shader.loadUniform(m_color_uniform);
 
+        return this;
     }
 
 
     //////////////////////////////////// functions to draw simple geometry ////////////////////////////////////
 
 
-    void SketchRenderer::drawSphere(const glm::vec3& position, const glm::vec3& color, float radius) {
+    SketchRenderer* SketchRenderer::drawSphere(const glm::vec3& position, float radius) {
 
+        prepare();
+
+        m_draw_orientation.setAxesRotation({0,0,0});
         m_draw_orientation.setScale(glm::vec3(radius));
         m_draw_orientation.setPosition(position);
 
@@ -59,52 +64,30 @@ namespace undicht {
         submit(&m_sphere_mesh);
 
         draw();
+
+        return this;
     }
 
-    void SketchRenderer::drawRay(const Ray& ray, const glm::vec3& color, float diameter) {
+    SketchRenderer* SketchRenderer::drawRay(const Ray& ray, float diameter) {
 
-        /*m_cube_model.setScale(glm::vec3(diameter, diameter, 1000.0));
-        m_cube_model.setPosition(ray.getPoint());
+        prepare();
 
-        // calculating the rotation (works only if the ray is not parallel to the x or y axis)
-        // 1. rotation around y axis
-
-        float angle_y = 0;
-
-        if(ray.getDir().z != 0) {
-            angle_y = glm::degrees(glm::atan(ray.getDir().x/ray.getDir().z));
-        } else {
-            angle_y = 90;
-        }
-
-        glm::quat rot = glm::angleAxis(angle_y, glm::vec3(0,1,0));
+        float yaw_angle = ray.getDir().z != 0.0f ? glm::atan(ray.getDir().x / ray.getDir().z) : 0.5 * 3.14159;
+        float pitch_angle = glm::asin(ray.getDir().y / glm::length(ray.getDir()));
 
 
-        // adding pitch
-        glm::vec3 pitch_axis = glm::cross(ray.getDir(), glm::vec3(0,1,0));
+        m_draw_orientation.setAxesRotation({0,glm::degrees(pitch_angle), glm::degrees(yaw_angle)});
+        m_draw_orientation.setPosition(ray.getPoint());
+        m_draw_orientation.setScale(glm::vec3(0.1f, 0.1f, 1000.0f));
 
-        if(!glm::length(pitch_axis)) {
-            pitch_axis = glm::vec3(1,0,0);
-        } else {
-            pitch_axis = glm::normalize(pitch_axis);
-        }
+        loadModelOrientation(m_draw_orientation);
+        submit(&m_cube_mesh);
 
-        float pitch_angle = glm::degrees(glm::asin(ray.getDir().y / glm::length(ray.getDir())));
+        draw();
 
-        rot = glm::rotate(rot, pitch_angle, pitch_axis);
-
-        m_cube_model.setRotation(rot);
-
-        // changing the rays color to match its direction
-        unsigned char rgba[4] = {color.x * 255, color.y * 255, color.z * 255, 1};
-
-        m_cube_model.getTexture().setPixelFormat(BufferLayout({UND_UNSIGNED_CHAR, UND_UNSIGNED_CHAR, UND_UNSIGNED_CHAR, UND_UNSIGNED_CHAR}));
-        m_cube_model.getTexture().setSize(1,1);
-        m_cube_model.getTexture().setData((char*)rgba,4);
-
-
-        MasterRenderer3D::s_forward_renderer->drawModel(m_cube_model);*/
+        return this;
     }
+
 
 
 } // undicht

@@ -35,41 +35,41 @@ namespace undicht {
 
     void Orientation3D::operator= (const Orientation3D& o) {
 
-            m_position = o.m_position;
-            m_rotation = o.m_rotation;
-            m_scale = o.m_scale;
+        m_position = o.m_position;
+        m_rotation = o.m_rotation;
+        m_scale = o.m_scale;
 
-            m_update_pos = o.m_update_pos;
-            m_update_rot = o.m_update_rot;
-            m_update_transf = o.m_update_transf;
+        m_update_pos = o.m_update_pos;
+        m_update_rot = o.m_update_rot;
+        m_update_transf = o.m_update_transf;
 
-            m_transl_mat = o.m_transl_mat;
-            m_rot_mat = o.m_rot_mat;
-            m_transf_mat = o.m_transf_mat;
+        m_transl_mat = o.m_transl_mat;
+        m_rot_mat = o.m_rot_mat;
+        m_transf_mat = o.m_transf_mat;
 
-            // making sure the parent orientation is the one o's parent orientation got copied to
-            // if o's parent orientation didnt get copied, o's parent orientation is this orientations parent
-            if(o.m_relative_orientation) {
+        // making sure the parent orientation is the one o's parent orientation got copied to
+        // if o's parent orientation didnt get copied, o's parent orientation is this orientations parent
+        if(o.m_relative_orientation) {
 
-                if(o.m_relative_orientation->m_childs_left_to_copy > 0) {
+            if(o.m_relative_orientation->m_childs_left_to_copy > 0) {
 
-                    setTransfRelTo(o.m_relative_orientation->m_last_copy);
-                    ((Orientation3D*)&o)->m_relative_orientation->m_childs_left_to_copy -= 1;
-                } else {
-
-                    setTransfRelTo(o.m_relative_orientation);
-                }
-
+                setTransfRelTo(o.m_relative_orientation->m_last_copy);
+                ((Orientation3D*)&o)->m_relative_orientation->m_childs_left_to_copy -= 1;
             } else {
 
-                setTransfRelTo(0);
+                setTransfRelTo(o.m_relative_orientation);
             }
 
-            // so that orientations relative to this one can find the object
-            // not the nicest way to do things, lets hope it works
-            ((Orientation3D*)&o)->m_last_copy = this;
-            ((Orientation3D*)&o)->m_childs_left_to_copy = o.m_total_childs;
-            m_last_copy = this;
+        } else {
+
+            setTransfRelTo(0);
+        }
+
+        // so that orientations relative to this one can find the object
+        // not the nicest way to do things, lets hope it works
+        ((Orientation3D*)&o)->m_last_copy = this;
+        ((Orientation3D*)&o)->m_childs_left_to_copy = o.m_total_childs;
+        m_last_copy = this;
     }
 
 
@@ -130,7 +130,7 @@ namespace undicht {
         return m_transl_mat;
     }
 
-    glm::vec3 Orientation3D::getWorldPosition() const{
+    glm::vec3 Orientation3D::getWorldPosition() const {
         /** @return the position relative to the worlds 0,0,0 */
 
         if(!m_relative_orientation) {
@@ -172,7 +172,37 @@ namespace undicht {
     }
 
 
-    const glm::quat& Orientation3D::getRotation() const{
+    void Orientation3D::setAxesRotation(std::vector<float> angles, std::vector<Axis> axes) {
+        /** Rotation around multiple axis
+        * @param angles: in degrees
+        * @param axes: the axis around which to rotate (Order of rotation matters!!)
+        * @param axes: default is euler rotation: z (roll), x (pitch), y (yaw)*/
+
+        glm::quat rotation = glm::angleAxis(0.0f, glm::vec3(0,0,-1));
+
+        for(int i = 0; i < angles.size(); i++) {
+
+            switch(axes[i]){
+
+                case UND_X_AXIS:
+                rotation = glm::angleAxis(angles[i], glm::vec3(1,0,0)) * rotation;
+                break;
+
+                case UND_Y_AXIS:
+                rotation = glm::angleAxis(angles[i], glm::vec3(0,1,0)) * rotation;
+                break;
+
+                case UND_Z_AXIS:
+                rotation = glm::angleAxis(angles[i], glm::vec3(0,0,1)) * rotation;
+                break;
+            }
+
+        }
+
+        setRotation(rotation);
+    }
+
+    const glm::quat& Orientation3D::getRotation() const {
 
         return m_rotation;
     }
@@ -190,7 +220,7 @@ namespace undicht {
     }
 
 
-    glm::quat Orientation3D::getWorldRot() const{
+    glm::quat Orientation3D::getWorldRot() const {
         /** @return the absolute rotation relative to the world */
 
         if(!m_relative_orientation) {
@@ -222,7 +252,7 @@ namespace undicht {
         return m_scale;
     }
 
-    glm::vec3 Orientation3D::getWorldScale() const{
+    glm::vec3 Orientation3D::getWorldScale() const {
         // scale multiplied by the scale of the orientations parents
 
         if(!m_relative_orientation) {

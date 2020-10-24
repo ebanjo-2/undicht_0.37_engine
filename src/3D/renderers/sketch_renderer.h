@@ -30,14 +30,17 @@ namespace undicht {
         public:
             // changing the way things are drawn
 
-            void setDrawColor(const glm::vec3& color);
+            /// @return this
+            SketchRenderer* setDrawColor(const glm::vec3& color);
 
         public:
             // functions to draw simple geometry
 
-            virtual void drawSphere(const glm::vec3& position, const glm::vec3& color = glm::vec3(0.8,0.8,0.8), float radius = 0.1f);
+            /// @return this
+            virtual SketchRenderer* drawSphere(const glm::vec3& position, float radius = 0.1f);
 
-            virtual void drawRay(const Ray& ray, const glm::vec3& color = glm::vec3(0.8,0.8,0.8), float diameter = 0.1f);
+            /// @return this
+            virtual SketchRenderer* drawRay(const Ray& ray, float diameter = 0.1f);
 
         public:
 

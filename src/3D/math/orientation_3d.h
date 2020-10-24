@@ -3,9 +3,16 @@
 
 #include <glm/glm/glm.hpp>
 #include <glm/glm/gtx/quaternion.hpp>
+#include <vector>
 
 
 namespace undicht {
+
+    enum Axis {
+        UND_X_AXIS, // default orientation: right is positive x direction
+        UND_Y_AXIS, // default orientation: up is positive y direction
+        UND_Z_AXIS  // default orientation: back is positive z direction
+    };
 
 
     class Orientation3D {
@@ -76,6 +83,12 @@ namespace undicht {
 
             // rotation around the orientations world position
             void setRotation(const glm::quat& rot);
+
+            /** Rotation around multiple axis
+            * @param angles: in degrees
+            * @param axes: the axis around which to rotate (Order of rotation matters!!)
+            * @param axes: default is euler rotation: z (roll), x (pitch), y (yaw)*/
+            void setAxesRotation(std::vector<float> angles, std::vector<Axis> axes = std::vector<Axis>({UND_Z_AXIS, UND_X_AXIS, UND_Y_AXIS}));
 
             const glm::quat& getRotation() const;
             const glm::mat4& getRotMat();

@@ -5,6 +5,7 @@
 
 
 #include <3D/math/ray.h>
+#include <3D/math/plane.h>
 #include <3D/entities/model_3d.h>
 
 #include <graphics/vertex_buffer.h>
@@ -22,6 +23,8 @@ namespace undicht {
 
             graphics::VertexBuffer m_sphere_mesh;
             graphics::VertexBuffer m_cube_mesh;
+
+            graphics::VertexBuffer m_var_mesh; // used to draw triangles, no fixed vertex positions
 
             graphics::Uniform m_color_uniform;
 
@@ -41,6 +44,12 @@ namespace undicht {
 
             /// @return this
             virtual SketchRenderer* drawRay(const Ray& ray, float diameter = 0.1f);
+
+            /// @return this
+            virtual SketchRenderer* drawPlane(const Plane& plane, float diameter = 1000.0f);
+
+            /// @return this
+            virtual SketchRenderer* drawTriangle(const glm::vec3& pos_1, const glm::vec3& pos_2, const glm::vec3& pos_3);
 
         public:
 
